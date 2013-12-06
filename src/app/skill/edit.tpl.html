@@ -1,0 +1,44 @@
+
+
+
+<section id="edit-skill">
+  <header>
+    <nav>
+      <a href="#/skill/list" class="btn btn-default">Back to List</a>
+      <a ng-href="#/skill/{{slug}}/view" class="btn btn-primary">View</a>
+    </nav>
+    <h1>{{skill.title}}</h1>
+  </header>
+  <form class="form-horizontal" role="form">
+
+    <div class="form-group">
+      <label for="prerequisites">
+        Prereqs
+      </label>
+      <div class="form-input">
+        <tags id="prerequisites" model="skill.prereqs" src="s as s for s in prereqList" options="{addable: false}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="tags">
+        Tags
+      </label>
+      <div class="form-input">
+        <tags id="tags" model="skill.tags" src="t as t for t in tagList" options="{addable: true}"></tags>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label for="content">Content</label>
+      <div class="form-input">
+        <!-- <div id="content" text-angular ng-model="skill.content"></div> -->
+        <input type="text"  class="form-control" ng-model="skill.content">
+      </div>
+    </div>
+
+
+  </form>
+
+</section>

@@ -1,0 +1,17 @@
+
+
+<section id="skill-list">
+	<h2>Skills</h2>
+
+	<ul class="list-unstyled">
+		<li ng-repeat="(slug,skill) in skillList">
+			<skill-list-entry slug="slug" skill="skill" 
+                        view-url="#/skill/{{slug}}/view"
+                        edit-url="#/skill/{{slug}}/edit"
+                        rename="rename" />
+		</li>
+	</ul>
+
+	<new-skill create="add"/>
+
+</section>

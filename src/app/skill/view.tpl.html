@@ -1,0 +1,24 @@
+<section class="skill">
+<header>
+  <nav>
+  <a href="#/skill/list" class="btn btn-default">Back to List</a>
+  <a ng-href="#/skill/{{slug}}/edit" class="btn btn-primary">Edit</a>
+  </nav>
+  <h1>{{skill.title}}</h1>
+  <taglist tags="skill.tags" label="Tags:"/> 
+</header>
+<aside>
+  <h1>Prerequisites:</h1>
+  <ul ng-show="skill.prereqs.length > 0">
+    <li ng-repeat="req in skill.prereqs">
+      {{req}}
+    </li>
+  </ul>
+  <span ng-show="!(skill.prereqs.length>0)">
+    None
+  </span>
+</aside>
+<article ng-bind-html="skill.content">
+</article>
+</section>
+
