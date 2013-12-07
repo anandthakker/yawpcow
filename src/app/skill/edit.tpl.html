@@ -15,26 +15,21 @@
       <label for="prerequisites">
         Prereqs
       </label>
-      <div class="form-input">
-        <tags id="prerequisites" model="skill.prereqs" src="s as s for s in prereqList" options="{addable: false}">
-      </div>
+      <tag-select class="form-input" tags="prereqList" model="skill.prereqs">
     </div>
 
     <div class="form-group">
       <label for="tags">
         Tags
       </label>
-      <div class="form-input">
-        <tags id="tags" model="skill.tags" src="t as t for t in tagList" options="{addable: true}"></tags>
-      </div>
+      <tag-select class="form-input" tags="tagList" model="skill.tags">
     </div>
-
 
     <div class="form-group">
       <label for="content">Content</label>
+
       <div class="form-input">
-        <!-- <div id="content" text-angular ng-model="skill.content"></div> -->
-        <input type="text"  class="form-control" ng-model="skill.content">
+        <div id="content" text-angular ng-model="skill.content"></div>
       </div>
     </div>
 

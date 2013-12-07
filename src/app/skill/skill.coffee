@@ -14,9 +14,8 @@ angular.module("yawpcow.skill.main", [
   "yawpcow.skill.taglist"
   "ngSanitize"
   "textAngular"
-  "decipher.tags"
-  "ui.bootstrap.typeahead"
   "firebase"
+  "yawpcow.tags"
 ]
 ).config(config = ($stateProvider) ->
   $stateProvider.state "skill",
@@ -47,9 +46,28 @@ angular.module("yawpcow.skill.main", [
 SkillController = ($log, $scope, $state, $stateParams, skillResourceUrl, angularFire) ->
   $log.debug "SkillController"
   $scope.skillList = {}
+  $scope.prereqList = []
+  $scope.tagList = []
+
   ref = new Firebase(skillResourceUrl)
   angularFire(ref, $scope, 'skillList').then ()->
-    $log.debug  $scope.skillList
+    $log.debug ["$scope.skillList", $scope.skillList]
+    # TODO: update on changes to skill list
+    $scope.prereqList.push.apply $scope.prereqList, (slug for slug,skill of $scope.skillList)
+
+    $log.debug ["$scope.prereqList", $scope.prereqList]
+
+    # TODO: update on changes to a skill
+    $scope.tagList.push.apply  $scope.tagList, _.compose(
+      _.uniq,
+      _.compact,
+      _.flatten,
+      ((array)->_.pluck(array,'tags')),
+      _.values
+    ) $scope.skillList
+
+    $log.debug ["$scope.tagList", $scope.tagList]
+
 
 ).controller("SkillViewEditCtrl",
 SkillViewEditController = ($log, $scope, $state, $stateParams, skillResourceUrl, angularFire) ->
@@ -65,6 +83,6 @@ SkillViewEditController = ($log, $scope, $state, $stateParams, skillResourceUrl,
 
   $scope.edit = () -> $state.go('skill.edit')
   $scope.view = () -> $state.go('skill.view')
-  $scope.tagList = ["HTML", "CSS", "concept"]
-  $scope.prereqList = Object.keys($scope.skillList)
 )
+
+

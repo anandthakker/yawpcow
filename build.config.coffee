@@ -65,6 +65,7 @@ module.exports =
   ###
   vendor_files:
     js: [
+      "vendor/jquery/jquery.js"
       "vendor/angular/angular.js"
       "vendor/angular-ui-bootstrap/dist/ui-bootstrap-tpls-0.7.0.min.js"
       "vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js"
@@ -75,9 +76,14 @@ module.exports =
       "vendor/angular-slugify/angular-slugify.js"
       "vendor/angular-sanitize/angular-sanitize.min.js"
       "vendor/textAngular/textAngular.min.js"
-      "vendor/angular-tags/dist/angular-tags-0.2.10-tpls.js"
+      "vendor/select2/select2.js"
+      "vendor/underscore/underscore.js"
     ]
     css: [
       "vendor/angular-tags/dist/angular-tags-0.2.10.css"
+      "vendor/select2/select2.css"
     ]
-    assets: []
+    assets: [
+      "vendor/select2/select2-spinner.gif"
+      "vendor/select2/select2x2.png"
+    ]

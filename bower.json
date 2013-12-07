@@ -14,7 +14,10 @@
     "textAngular": "~1.1.1",
     "angular-tags": "~0.2.10"
   },
-  "dependencies": {},
+  "dependencies": {
+    "underscore": "~1.5.2",
+    "select2": "~3.4.5"
+  },
   "resolutions": {
     "angular": "1.2.3"
   }
