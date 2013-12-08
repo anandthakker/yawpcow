@@ -13,9 +13,17 @@ angular.module("yawpcow.skill.resource", [
   tags = []
 
   skillSet =
+    # These are updated upon receiving the data from firebase.
     prereqList: prereqs
     tagList: tags
 
+    ###
+    Get the skill list and bind it to the given property (name) of the given scope.
+    (this is an artifact of angularFire's API--not necessarily how i'd have designed it, but
+    worth it not to reinvent the wheel)
+
+    return: promise that yields the list.
+    ###
     list: (scope, name) ->
       listPromise = angularFire(baseRef, scope, name
       ).then (disassociate)->
@@ -41,6 +49,9 @@ angular.module("yawpcow.skill.resource", [
 
       , (error)->error
 
+    ###
+    Get a particular skill and bind it to the given property (name) of the given scope.
+    ###
     get: (scope, name, skillSlug) ->
       skillPromise = angularFire(baseRef.child(skillSlug), scope, name
       ).then (skill)->
