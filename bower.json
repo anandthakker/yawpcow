@@ -2,8 +2,10 @@
   "name": "yawpcow",
   "version": "0.0.1",
   "devDependencies": {
+    "angular-mocks": "~1.0.7"
+  },
+  "dependencies": {
     "angular": "~1.2",
-    "angular-mocks": "~1.0.7",
     "bootstrap": "3.x",
     "angular-ui-bootstrap": "#bootstrap3",
     "angular-ui-router": "~0.2.0",
@@ -12,11 +14,10 @@
     "angular-slugify": "~1.0.0",
     "angular-sanitize": "~1.2.3",
     "textAngular": "~1.1.1",
-    "angular-tags": "~0.2.10"
-  },
-  "dependencies": {
+    "angular-tags": "~0.2.10",
     "underscore": "~1.5.2",
-    "select2": "~3.4.5"
+    "select2": "~3.4.5",
+    "ui-select2": "https://github.com/Zmetser/ui-select2.git#~0.0.4"
   },
   "resolutions": {
     "angular": "1.2.3"
