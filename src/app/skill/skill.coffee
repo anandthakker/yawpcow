@@ -14,7 +14,6 @@ angular.module("yawpcow.skill.main", [
   "yawpcow.skill.taglist"
   "ngSanitize"
   "textAngular"
-  "firebase"
   "yawpcow.tags"
 ]
 ).config(config = ($stateProvider) ->
@@ -43,43 +42,18 @@ angular.module("yawpcow.skill.main", [
       pageTitle: "Edit Skill"
 
 ).controller("SkillCtrl",
-SkillController = ($log, $scope, $state, $stateParams, skillResourceUrl, angularFire) ->
+SkillController = ($log, $scope, $state, $stateParams, skillSet) ->
   $log.debug "SkillController"
-  $scope.skillList = {}
-  $scope.prereqList = []
-  $scope.tagList = []
-
-  ref = new Firebase(skillResourceUrl)
-  angularFire(ref, $scope, 'skillList').then ()->
-    $log.debug ["$scope.skillList", $scope.skillList]
-    # TODO: update on changes to skill list
-    $scope.prereqList.push.apply $scope.prereqList, (slug for slug,skill of $scope.skillList)
-
-    $log.debug ["$scope.prereqList", $scope.prereqList]
-
-    # TODO: update on changes to a skill
-    $scope.tagList.push.apply  $scope.tagList, _.compose(
-      _.uniq,
-      _.compact,
-      _.flatten,
-      ((array)->_.pluck(array,'tags')),
-      _.values
-    ) $scope.skillList
-
-    $log.debug ["$scope.tagList", $scope.tagList]
+  skillSet.list($scope, 'skillList')
+  $scope.prereqList = skillSet.prereqList
+  $scope.tagList = skillSet.tagList
 
 
 ).controller("SkillViewEditCtrl",
-SkillViewEditController = ($log, $scope, $state, $stateParams, skillResourceUrl, angularFire) ->
+SkillViewEditController = ($log, $scope, $state, $stateParams, skillSet) ->
   $log.debug "SkillViewEditController"
   $scope.slug = $stateParams.skillTitle
-  ref = new Firebase(skillResourceUrl + "/" + $scope.slug)
-  angularFire(ref, $scope, 'skill').then ()->
-    $log.debug $scope.skill
-    if not $scope.skill.tags?
-      $scope.skill.tags = []
-    if not $scope.skill.prereqs?
-      $scope.skill.prereqs = []
+  skillSet.get($scope, 'skill', $scope.slug)
 
   $scope.edit = () -> $state.go('skill.edit')
   $scope.view = () -> $state.go('skill.view')

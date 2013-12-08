@@ -4,30 +4,50 @@ angular.module("yawpcow.skill.resource", [
   "firebase"
 ]
 ).config(config = () ->
-).factory('Skills', (Slug) ->
-  
-  skillcache = {
-    "what-is-html":
-      title: "What is HTML?"
-      prereqs: []
-      tags: ["HTML", "concepts"]
-      content: "<p>Blah blah blah</p>"
-  }
+).factory('skillSet', ($log, skillResourceUrl, angularFire, Slug, $q) ->
+  # No need to make this a class for now, since we only need a singleton.
 
-  Skills = {}
-    # list: () ->
-    #   collection
+  baseRef = new Firebase(skillResourceUrl)
+  skillList = {}
+  prereqs = []
+  tags = []
 
-    # get: (slug) -> ref(slug)
+  skillSet =
+    prereqList: prereqs
+    tagList: tags
 
-    # getByTitle: (title) -> Skills.get(Slug.slugify(title))
+    list: (scope, name) ->
+      listPromise = angularFire(baseRef, scope, name
+      ).then (disassociate)->
+        skillList = scope[name]
+        $log.debug ["skillList", skillList]
 
-    # add: (skill) ->
+        # TODO: update on changes to skill list
+        prereqs.push.apply prereqs, (slug for slug,skill of skillList)
 
-    # save: (skill, cb) -> collection.update(skill, cb)
+        # TODO: update on changes to a skill
+        tags.push.apply tags, _.compose(
+          _.uniq,
+          _.compact,
+          _.flatten,
+          ((array)->_.pluck(array,'tags')),
+          _.values
+        ) skillList
 
-    # delete: (skill) ->
-    #   delete skillcache[Slug.slugify(skill.title)]
+        $log.debug ["prereqs", prereqs]
+        $log.debug ["tags", tags]
 
+        skillList
+
+      , (error)->error
+
+    get: (scope, name, skillSlug) ->
+      skillPromise = angularFire(baseRef.child(skillSlug), scope, name
+      ).then (skill)->
+        if not skill.tags? then skill.tags = []
+        if not skill.prereqs? then skill.prereqs = []
+        $log.debug skill
+        skill # return skill to next promise
+      , (error) -> error
 
 )
