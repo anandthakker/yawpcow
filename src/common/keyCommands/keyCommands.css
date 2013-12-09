@@ -1,0 +1,6 @@
+.yc-key-label::before {
+  content: "(";
+}
+.yc-key-label::after {
+  content: ")";
+}

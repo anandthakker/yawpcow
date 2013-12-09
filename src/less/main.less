@@ -149,6 +149,18 @@ h2 {
   }
 }
 
+.key-commands {
+  background-color: rgba(50,50,50,.85);
+  color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  dt {
+    color: yellow;
+  }
+}
+
+
 
 /**
  * Now that all app-wide styles have been applied, we can load the styles for
@@ -157,7 +169,9 @@ h2 {
  * TODO: In a later version of this boilerplate, I'd like to automate this.
  */
 
+@import "../common/keyCommands/keyCommands.css";
 @import '../app/home/home.less';
 @import '../app/skill/skill.less';
+
 
 

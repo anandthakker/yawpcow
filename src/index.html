@@ -45,6 +45,11 @@
                     Home
                   </a>
                 </li>
+                <li>
+                  <a href="#/skill/list">
+                    Skills
+                  </a>
+                </li>
               </ul>
         </div>
       </div>
@@ -55,6 +60,24 @@
     <footer class="footer">
       <div class="container">
         <div class="footer-inner">
+          <div class="key-commands" 
+              ng-show="keyHelp"
+              yc-key="?:Show this help menu" 
+              yc-key-command="keyHelp = true;">
+            <dl>
+              <dt ng-repeat-start="(key, desc) in keyCommandGlossary">
+                {{key}}
+              </dt>
+              <dd ng-repeat-end>
+                {{desc}}
+              </dd>
+            </dl>
+            <a role="button" class="glyphicon glyphicon-remove" 
+            ng-click="keyHelp = false"
+            yc-key="esc">
+            Close
+            </a>
+          </div>
           <ul class="social">
             (social buttons?)
           </ul>

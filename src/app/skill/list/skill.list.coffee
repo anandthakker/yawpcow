@@ -3,6 +3,7 @@ angular.module("yawpcow.skill.list", [
   "slugifier"
   "yawpcow.skill.main"
   "yawpcow.skill.taglist"
+  "yawpcow.keyCommands"
 ]
 ).config( ($stateProvider) ->
   $stateProvider.state "skill.list",
@@ -26,7 +27,7 @@ angular.module("yawpcow.skill.list", [
     scope.delete = (slug)->
 
 
-).directive("newSkill", ($parse, $timeout) ->
+).directive("newSkill", ($log, $parse, $timeout) ->
   restrict: 'E'
   templateUrl: 'skill/list/skill.new.tpl.html'
   replace: true
@@ -45,6 +46,8 @@ angular.module("yawpcow.skill.list", [
         element.find('input')[0].focus()
     finishAdd = (title)->
       scope.create(scope.title)
+
+    element.bind 'click', () -> scope.$apply () -> if not scope.adding then scope.add()
 
     element.find('input').bind 'keyup', (e) -> scope.$apply () ->
       if(e.which == 13)

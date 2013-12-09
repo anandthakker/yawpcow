@@ -15,6 +15,7 @@ angular.module("yawpcow.skill.main", [
   "ngSanitize"
   "textAngular"
   "yawpcow.tags"
+  "yawpcow.keyCommands"
 ]
 ).config(config = ($stateProvider) ->
   $stateProvider.state "skill",

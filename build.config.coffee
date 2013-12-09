@@ -78,6 +78,7 @@ module.exports =
       "vendor/textAngular/textAngular.min.js"
       "vendor/select2/select2.js"
       "vendor/underscore/underscore.js"
+      "vendor/mousetrap/mousetrap.js"
     ]
     css: [
       "vendor/angular-tags/dist/angular-tags-0.2.10.css"
