@@ -78,12 +78,10 @@ angular.module("yawpcow.keyCommands", []
           #keeping this out of $apply because ng-click calls apply.
           element.triggerHandler 'click'
     else
+      #keeping this out of $apply because ng-click calls apply.
       cmd = () -> element.triggerHandler 'click'
 
     keyCommands.bind scope, key, cmd, desc
-
-    scope.ycKey = if key.length? then key[0] else key
-    scope.ycKeyHelp = desc
 )
 
 ### TBD:

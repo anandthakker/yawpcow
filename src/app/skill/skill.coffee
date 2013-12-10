@@ -48,16 +48,11 @@ SkillController = ($log, $scope, $state, $stateParams, skillSet) ->
   skillSet.list($scope, 'skillList')
   $scope.prereqList = skillSet.prereqList
   $scope.tagList = skillSet.tagList
-
-
 ).controller("SkillViewEditCtrl",
 SkillViewEditController = ($log, $scope, $state, $stateParams, skillSet) ->
   $log.debug "SkillViewEditController"
   $scope.slug = $stateParams.skillTitle
   skillSet.get($scope, 'skill', $scope.slug)
-
-  $scope.edit = () -> $state.go('skill.edit')
-  $scope.view = () -> $state.go('skill.view')
 )
 
 
