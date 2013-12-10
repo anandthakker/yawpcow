@@ -13,7 +13,7 @@ angular.module("yawpcow.skill.list", [
     data:
       pageTitle: "Skills"
 
-).directive("skillListEntry", ($parse) ->
+).directive("skillListEntry", () ->
   restrict: 'E'
   templateUrl: 'skill/list/skill.listentry.tpl.html'
   replace: true
@@ -22,30 +22,39 @@ angular.module("yawpcow.skill.list", [
     skill: "="
     viewUrl: "@"
     editUrl: "@"
-  link: (scope, element, attr) ->
-    scope.edit = (slug)->
-    scope.delete = (slug)->
 
-
-).directive("newSkill", ($log, $parse, $timeout) ->
+).directive("newSkill", ($log, $timeout, Slug, $state) ->
   restrict: 'E'
   templateUrl: 'skill/list/skill.new.tpl.html'
   replace: true
-  scope:
-    create: "="
   link: (scope, element, attr) ->
+    startAdd = ()->
+      scope.adding = true
+      scope.add = finishAdd
+      element.find('input').bind 'blur', () -> scope.$apply () ->
+        cancelAdd()
+      $timeout ()->
+        element.find('input')[0].focus()
     cancelAdd = ()->
       scope.adding = false
       scope.add = startAdd
-    startAdd = ()->
-      scope.adding = true
-      element.find('input').bind 'blur', () -> scope.$apply () ->
-        cancelAdd()
-      scope.add = finishAdd
-      $timeout ()->
-        element.find('input')[0].focus()
-    finishAdd = (title)->
-      scope.create(scope.title)
+    finishAdd = ()->
+      scope.adding = false
+      scope.add = startAdd
+      skill =
+        title: scope.title
+        prereqs: []
+        tags: []
+        content: ""
+      slug = Slug.slugify(scope.title)
+      scope.skillList[slug] = skill
+      # Minor bug: this will navigate to edit before Firebase
+      # has updated, so we briefly get a null pointer when that view loads, until
+      # angularFire syncs the new skill.
+      # Could short-circuit by reading the skill out of skillList, but then
+      # I think there's an issue with the skill syncing on changes... worth investigating,
+      # though.
+      $state.go('skill.edit', {skillTitle: slug})
 
     element.bind 'click', () -> scope.$apply () -> if not scope.adding then scope.add()
 
@@ -58,17 +67,6 @@ angular.module("yawpcow.skill.list", [
     scope.adding = false
 
 ).controller("SkillListCtrl",
-SkillListController = ($scope, $state, $stateParams, skillResourceUrl, Slug) ->
+SkillListController = ($scope) ->
 
-  $scope.add = (title)->
-    skill =
-      title: title
-      prereqs: []
-      tags: []
-      content: ""
-    slug = Slug.slugify(title)
-    $scope.skillList[slug] = skill
-    $state.go('skill.edit', {skillTitle: slug})
-
-  $scope.rename = ()->
 )

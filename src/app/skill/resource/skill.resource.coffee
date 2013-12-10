@@ -7,14 +7,21 @@ angular.module("yawpcow.skill.resource", [
 ).factory('skillSet', ($log, skillResourceUrl, angularFire, Slug, $q) ->
   # No need to make this a class for now, since we only need a singleton.
 
+
   baseRef = new Firebase(skillResourceUrl)
   skillList = {}
   prereqs = []
   tags = []
 
   skillSet =
-    # These are updated upon receiving the data from firebase.
+    ###
+    @property A list of legitimate prerequisites.
+    ###
     prereqList: prereqs
+
+    ###
+    @property A list of legitimate tags.
+    ###
     tagList: tags
 
     ###
@@ -22,7 +29,10 @@ angular.module("yawpcow.skill.resource", [
     (this is an artifact of angularFire's API--not necessarily how i'd have designed it, but
     worth it not to reinvent the wheel)
 
-    return: promise that yields the list.
+    @param {Object} scope The scope to which to bind the skill list
+    @param {String} name The name to bind the skill list to in the given scope.
+
+    @returns {Object} a promise that yields the skillList (a slug->skill object map)
     ###
     list: (scope, name) ->
       listPromise = angularFire(baseRef, scope, name
@@ -49,12 +59,20 @@ angular.module("yawpcow.skill.resource", [
 
       , (error)->error
 
+
     ###
     Get a particular skill and bind it to the given property (name) of the given scope.
+
+    @param {Object} scope The scope to which to bind the skill list
+    @param {String} name The name to bind the skill list to in the given scope.
+    @param {String} skillSlug The slugified name of the skill to fetch
+
+    @returns {Object} a promise that yields the skill object
     ###
     get: (scope, name, skillSlug) ->
       skillPromise = angularFire(baseRef.child(skillSlug), scope, name
-      ).then (skill)->
+      ).then (disassociate)->
+        skill = scope[name]
         if not skill.tags? then skill.tags = []
         if not skill.prereqs? then skill.prereqs = []
         $log.debug skill

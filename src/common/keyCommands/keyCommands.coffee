@@ -9,14 +9,14 @@ angular.module("yawpcow.keyCommands", []
 
   keyCommands =
     ###
-    # @param {Object} scope The scope associated with this key binding.
-    # @param {String} key The Mousetrap key combo string (e.g. "k", "shift+s", "command+t")
-    # @param {function} fn The callback.
-    # @param {String} description A description for this key command, for use in the glossary.
-    #
-    # BUG:
-    # No history/stack on a given key combo, so if a binding is overwritten,
-    # then when scope of the latter is destroyed, the former won't be restored.
+    @param {Object} scope The scope associated with this key binding.
+    @param {String} key The Mousetrap key combo string (e.g. "k", "shift+s", "command+t")
+    @param {function} fn The callback.
+    @param {String} description A description for this key command, for use in the glossary.
+    
+    BUG:
+    No history/stack on a given key combo, so if a binding is overwritten,
+    then when scope of the latter is destroyed, the former won't be restored.
     ###
     bind: (scope, key, fn, description) ->
       Mousetrap.bind key, fn
@@ -27,14 +27,14 @@ angular.module("yawpcow.keyCommands", []
         keyCommands.unbind key
 
     ###
-    # @param {String} key The Mousetrap key combo string (e.g. "k", "shift+s", "command+t")
+    @param {String} key The Mousetrap key combo string (e.g. "k", "shift+s", "command+t")
     ###
     unbind: (key) ->
       Mousetrap.unbind(key)
       delete glossary[key]
 
     ###
-    # @property An object whose properties are key combo strings and values are descriptions.
+    @property An object whose properties are key combo strings and values are descriptions.
     ###
     glossary: glossary
 
@@ -47,10 +47,10 @@ angular.module("yawpcow.keyCommands", []
 
   restrict: "A"
   ###
-    Expected attributes:
-    yc-key can be in the form "key" or "key:description"
-    yc-key-command is an expression to be evaluated when yc-key is pressed.  If it's absent,
-    we'll try to either follow the link or else trigger the click event.
+  Expected attributes:
+  yc-key can be in the form "key" or "key:description"
+  yc-key-command is an expression to be evaluated when yc-key is pressed.  If it's absent,
+  we'll try to either follow the link or else trigger the click event.
   ###
   link: (scope, element, attrs) ->
 
@@ -78,7 +78,7 @@ angular.module("yawpcow.keyCommands", []
           #keeping this out of $apply because ng-click calls apply.
           element.triggerHandler 'click'
     else
-      cmd = safeApply scope, () -> element.triggerHandler 'click'
+      cmd = () -> element.triggerHandler 'click'
 
     keyCommands.bind scope, key, cmd, desc
 
