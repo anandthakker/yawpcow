@@ -7,7 +7,6 @@ angular.module("yawpcow.skill.resource", [
 ).factory('skillSet', ($log, skillResourceUrl, angularFire, Slug, $q) ->
   # No need to make this a class for now, since we only need a singleton.
 
-
   baseRef = new Firebase(skillResourceUrl)
   skillList = {}
   prereqs = []
@@ -40,20 +39,34 @@ angular.module("yawpcow.skill.resource", [
         skillList = scope[name]
         $log.debug ["skillList", skillList]
 
-        # TODO: update on changes to skill list
-        prereqs.push.apply prereqs, (slug for slug,skill of skillList)
+        # These are linear in the # of skills, which is fine as long as we
+        # don't call them on every edit.
+        updatePrereqs = () ->
+          prereqs.length = 0
+          prereqs.push.apply prereqs, (slug for slug,skill of skillList)
+        updateTags = () ->
+          tags.length = 0
+          tags.push.apply tags, _.compose(
+            _.uniq,
+            _.compact,
+            _.flatten,
+            ((array)->_.pluck(array,'tags')),
+            _.values
+          ) skillList
 
-        # TODO: update on changes to a skill
-        tags.push.apply tags, _.compose(
-          _.uniq,
-          _.compact,
-          _.flatten,
-          ((array)->_.pluck(array,'tags')),
-          _.values
-        ) skillList
+        updatePrereqs()
+        updateTags()
 
         $log.debug ["prereqs", prereqs]
         $log.debug ["tags", tags]
+
+        baseRef.on "child_added", ->
+          updatePrereqs()
+          updateTags()
+
+        baseRef.on "child_removed", ->
+          updatePrereqs()
+          updateTags()
 
         skillList
 
@@ -70,12 +83,13 @@ angular.module("yawpcow.skill.resource", [
     @returns {Object} a promise that yields the skill object
     ###
     get: (scope, name, skillSlug) ->
-      skillPromise = angularFire(baseRef.child(skillSlug), scope, name
+      skillPromise = angularFire(skillRef = baseRef.child(skillSlug), scope, name
       ).then (disassociate)->
         skill = scope[name]
         if not skill.tags? then skill.tags = []
         if not skill.prereqs? then skill.prereqs = []
         $log.debug skill
+
         skill # return skill to next promise
       , (error) -> error
 

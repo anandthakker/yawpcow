@@ -1,7 +1,7 @@
 ###
 This is the module that will get pulled in by the yawpcow (main app) module
 ###
-angular.module("yawpcow.skill", ["yawpcow.skill.main", "yawpcow.skill.list"])
+angular.module("yawpcow.skill", ["yawpcow.skill.main", "yawpcow.skill.list", "yawpcow.skill.graph"])
 
 ###
 This is separated from yawpcow.skill so that we can have child module .list

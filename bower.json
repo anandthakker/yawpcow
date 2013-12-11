@@ -18,7 +18,8 @@
     "underscore": "~1.5.2",
     "select2": "~3.4.5",
     "ui-select2": "https://github.com/Zmetser/ui-select2.git#~0.0.4",
-    "mousetrap": "~1.4.6"
+    "mousetrap": "~1.4.6",
+    "d3": "~3.3.11"
   },
   "resolutions": {
     "angular": "1.2.3"
