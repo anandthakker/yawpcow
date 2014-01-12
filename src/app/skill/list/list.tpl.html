@@ -5,11 +5,13 @@
 
 	<ul class="list-unstyled">
 		<li ng-repeat="(slug,skill) in skillList">
-			<skill-list-entry slug="slug" skill="skill" 
-                        view-url="#/skill/{{slug}}/view"
-                        edit-url="#/skill/{{slug}}/edit"
-                        rename="rename" />
-		</li>
+      <div>
+        <a ng-href="#/skill/{{slug}}/view" class="">{{skill.title}}</a> 
+        <taglist tags="skill.tags"/>
+      </div>
+      <a ng-href="#/skill/{{slug}}/edit" role="button" class="btn btn-primary">Edit</a>
+      <button type="button" class="btn btn-danger" ng-click="delete(slug)">Delete</button>
+    </li>
 	</ul>
 
 	<new-skill create="add" yc-key="['n','+']:New Skill"/>

@@ -45,7 +45,6 @@ angular.module("yawpcow.skill.graph", [
         prev
 
 
-
     getPrereqs: (skillSlug)->
       @skillMap[skillSlug].prereqs
 

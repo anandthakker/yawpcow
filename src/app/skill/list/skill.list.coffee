@@ -13,16 +13,6 @@ angular.module("yawpcow.skill.list", [
     data:
       pageTitle: "Skills"
 
-).directive("skillListEntry", () ->
-  restrict: 'E'
-  templateUrl: 'skill/list/skill.listentry.tpl.html'
-  replace: true
-  scope:
-    slug: "="
-    skill: "="
-    viewUrl: "@"
-    editUrl: "@"
-
 ).directive("newSkill", ($log, $timeout, Slug, $state) ->
   restrict: 'E'
   templateUrl: 'skill/list/skill.new.tpl.html'
