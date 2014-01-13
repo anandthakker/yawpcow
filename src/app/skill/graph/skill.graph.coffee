@@ -83,15 +83,21 @@ angular.module("yawpcow.skill.graph", [
     draw = (tree)->
       width = parseInt(svg.style('width'), 10)
       height = width
-      console.log "Width: #{width}, Height: #{height}"
 
       xScale.range([0,width])
       yScale.range([0,height])
 
       nodes = tree.nodes(root)
+      links = tree.links(nodes)
+
+      # Remove root and adjust coordinate system to start with
+      # root's children
+      yScale.domain([root.children[0].y - nodeWidth, 100+nodeWidth])
+      nodes = nodes.filter (node)-> (node isnt root)
+      links = links.filter (link)-> (link.source isnt root)
 
       link = g.selectAll("path.link")
-        .data(tree.links(nodes))
+        .data(links)
       link.enter()
         .append("path")
         .attr("class", "link")
@@ -105,7 +111,6 @@ angular.module("yawpcow.skill.graph", [
       nodeEnter.append("rect")
       nodeEnter.append("text")
       node.attr("transform", (d) ->
-        console.log d
         "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"
       )
 
@@ -141,14 +146,13 @@ angular.module("yawpcow.skill.graph", [
       use slugs directly)
       ###
       tree.children( (d)->
-        _.map(if d is root
+        (if d is root
           graph.leaves
         else
           graph.getSequels(d.name)
-        , (slug)->
+        ).map (slug)->
           if not nodeMap[slug]? then nodeMap[slug] = {name: slug}
           nodeMap[slug]
-        )
       )
 
       draw(tree)
