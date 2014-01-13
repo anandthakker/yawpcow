@@ -18,6 +18,7 @@ angular.module("yawpcow.skill.list", [
   templateUrl: 'skill/list/skill.new.tpl.html'
   replace: true
   link: (scope, element, attr) ->
+
     startAdd = ()->
       scope.adding = true
       scope.add = finishAdd
@@ -58,5 +59,14 @@ angular.module("yawpcow.skill.list", [
 
 ).controller("SkillListCtrl",
 SkillListController = ($scope) ->
-
+  $scope.selected = {}
+  $scope.delete = (slug) ->
+    if(slug)
+      delete $scope.skillList[slug]
+    else
+      for slug, selected of $scope.selected
+        if selected
+          console.log $scope.skillList[slug]
+          delete $scope.skillList[slug]
+          delete $scope.selected[slug]
 )

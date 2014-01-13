@@ -3,22 +3,23 @@
   .make-sm-column(4);
   .make-sm-column-offset(4);
 
-  li {
-  	margin-bottom: 5px;
-  }
-
   .btn {
   	padding: 0px;
   }
+
+  .btn-link {
+    color: black;
+  }
+
 }
 
-.skill-list-entry {
-  .controls {
-    visibility: hidden;
+li.skill {
+  margin-bottom: 5px;
+  &>*{
+    display: inline-block;
   }
-  &:hover {
-    .controls {
-      visibility: visible;
-    }
-  }
+
+}
+
+.skill-list-add {
 }

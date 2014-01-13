@@ -4,16 +4,25 @@
 	<h2>Skills</h2>
 
 	<ul class="list-unstyled">
-		<li ng-repeat="(slug,skill) in skillList">
+		<li ng-repeat="(slug,skill) in skillList" class="skill">
+      <input type="checkbox" ng-model="selected[slug]" tabindex="1" autofocus>
       <div>
         <a ng-href="#/skill/{{slug}}/view" class="">{{skill.title}}</a> 
         <taglist tags="skill.tags"/>
       </div>
-      <a ng-href="#/skill/{{slug}}/edit" role="button" class="btn btn-primary">Edit</a>
-      <button type="button" class="btn btn-danger" ng-click="delete(slug)">Delete</button>
+      <div class="controls">
+        <a ng-href="#/skill/{{slug}}/edit" role="button" class="btn btn-link"><i class="fa fa-edit"></i></a>
+        <button type="button" class="btn btn-link" ng-click="delete(slug)"><i class="fa fa-times"></i></button>
+      </div>
     </li>
 	</ul>
 
+  <button type="button" class="btn btn-link"
+    ng-click="delete()"
+    yc-key="['d']:Delete Selected">
+    <i class="fa fa-times"/>
+    Delete Selected
+  </button>
 	<new-skill create="add" yc-key="['n','+']:New Skill"/>
 
 </section>
