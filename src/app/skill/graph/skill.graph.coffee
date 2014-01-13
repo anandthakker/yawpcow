@@ -57,72 +57,105 @@ angular.module("yawpcow.skill.graph", [
         0
       else
         1 + _.max(skill.prereqs, @getLongestHeight)
-).directive("skillGraph", (SkillSetGraph)->
+).directive("skillGraph", ($window, SkillSetGraph)->
 
   restrict: "E"
   replace: true
-  template: "<div/>"
+  template: "<div class='skill-graph' />"
   scope:
     skillSet: "="
   link: (scope, element, attr)->
+
+    root = {name: "_root"}
+    tree = d3.layout.tree()
+      .size([100,100])
+
+    nodeWidth = 10
+
+    svg = d3.select(element[0]).append("svg")
+    g = svg.append("g")
+
+    xScale = d3.scale.linear().domain([0,100])
+    yScale = d3.scale.linear().domain([-nodeWidth,100+nodeWidth])
+    diagonal = d3.svg.diagonal()
+      .projection (d)->[xScale(d.x), yScale(d.y)]
+
+    draw = (tree)->
+      width = parseInt(svg.style('width'), 10)
+      height = width
+      console.log "Width: #{width}, Height: #{height}"
+
+      xScale.range([0,width])
+      yScale.range([0,height])
+
+      nodes = tree.nodes(root)
+
+      link = g.selectAll("path.link")
+        .data(tree.links(nodes))
+      link.enter()
+        .append("path")
+        .attr("class", "link")
+      link.attr("d", diagonal)
+
+      node = g.selectAll("g.node")
+        .data(nodes)
+      nodeEnter = node.enter()
+        .append("g")
+        .attr("class", "node")
+      nodeEnter.append("rect")
+      nodeEnter.append("text")
+      node.attr("transform", (d) ->
+        console.log d
+        "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"
+      )
+
+      w = xScale(nodeWidth)-xScale(0)
+      h = yScale(nodeWidth)-yScale(0)
+      rect = node.selectAll("rect")
+      rect
+        .attr("width", w)
+        .attr("height", h)
+        .attr("x", -w/2)
+        .attr("y", -h/2)
+        .attr("rx", w/10)
+        .attr("ry", h/10)
+
+      node.selectAll("text")
+        .attr("dx", 0)
+        .attr("dy", 0)
+        .attr("text-anchor", "middle")
+        .text (d) ->
+          d.name
+
     scope.$watch "skillSet", (value)->
       if not value? then return
       graph = new SkillSetGraph(scope.skillSet)
 
-
       nodeMap = {}
-      root = {name: "_root"}
 
-      g = d3.select(element[0]).append("svg")
-        .attr("width", 400)
-        .attr("height", 300)
-        .append("g")
-        .attr("transform", "translate(40,0)")
-
-      tree = d3.layout.tree()
-        .size([300,150])
-        .children( (d)->
-          _.map(if d is root
-            graph.leaves
-          else
-            graph.getSequels(d.name)
-          , (slug)->
-            if not nodeMap[slug]? then nodeMap[slug] = {name: slug}
-            nodeMap[slug]
-          )
+      ###
+      Define a children accessor function that asks the SkillSetGraph for a given
+      skill's sequels.
+      Note that we have to wrap the slugs in an object because the tree layout
+      expects to get objects.  (Would love to find out I'm wrong about this and just
+      use slugs directly)
+      ###
+      tree.children( (d)->
+        _.map(if d is root
+          graph.leaves
+        else
+          graph.getSequels(d.name)
+        , (slug)->
+          if not nodeMap[slug]? then nodeMap[slug] = {name: slug}
+          nodeMap[slug]
         )
+      )
 
-      diagonal = d3.svg.diagonal()
-        .projection (d)->[d.y, d.x]
+      draw(tree)
 
-      nodes = tree.nodes(root)
+    angular.element($window).on 'resize', () -> draw(tree)
 
-      link = g.selectAll("pathlink")
-        .data(tree.links(nodes))
-        .enter()
-        .append("path")
-        .attr("class", "link")
-        .attr("d", diagonal)
 
-      node = g.selectAll("g.node")
-        .data(nodes)
-        .enter()
-        .append("g")
-        .attr("transform", (d) ->
-          "translate(" + d.y + "," + d.x + ")"
-        )
-
-      node.append("circle").attr "r", 4.5
-
-      node.append("text")
-        .attr("dx", (d) ->
-          if d.children then -8 else 8
-        )
-        .attr("dy", 3).attr("text-anchor", (d) ->
-          if d.children then "end" else "start"
-        )
-        .text (d) ->
-          d.name
 ).controller("SkillGraphCtrl", SkillGraphController = ($scope) ->
 
 )
