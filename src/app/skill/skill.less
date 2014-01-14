@@ -1,6 +1,13 @@
 
+#skill-nav {
+  .pull-right();
+  & + * {
+    clear: both;
+  }
+}
+
 .taglist {
-   
+  display: inline;   
   .small;
   ul {
     display: inline;
@@ -21,7 +28,9 @@
 
 }
 
-@import 'view.less';
-@import 'edit.less';
+
+@import 'view/view.less';
+@import 'edit/edit.less';
 @import 'list/list.less';
+@import 'cards/cards.less';
 @import 'graph/graph.less';

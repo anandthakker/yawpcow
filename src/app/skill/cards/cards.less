@@ -1,0 +1,21 @@
+/**
+* From: http://sickdesigner.com/masonry-css-getting-awesome-with-css3/
+* TODO: this needs a fallback for <IE10
+*/
+
+#skill-cards {
+    -moz-column-count: 3;
+    -moz-column-gap: 10px;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 10px;
+    column-count: 3;
+    column-gap: 10px;
+    width: 480px; 
+
+    div {
+        display: inline-block; /* Display inline-block, and absolutely NO FLOATS! */
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+}

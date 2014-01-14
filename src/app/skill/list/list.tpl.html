@@ -1,13 +1,11 @@
 
 
 <section id="skill-list">
-	<h2>Skills</h2>
-
-	<ul class="list-unstyled">
-		<li ng-repeat="(slug,skill) in skillList" class="skill">
+	<ul class="skills list-unstyled">
+		<li ng-repeat="(slug,skill) in skillList">
       <input type="checkbox" ng-model="selected[slug]" tabindex="1" autofocus>
       <div>
-        <a ng-href="#/skill/{{slug}}/view" class="">{{skill.title}}</a> 
+        <a ng-href="#/skill/{{slug}}/view">{{skill.title}}</a> 
         <taglist tags="skill.tags"/>
       </div>
       <div class="controls">
@@ -23,6 +21,6 @@
     <i class="fa fa-times"/>
     Delete Selected
   </button>
-	<new-skill create="add" yc-key="['n','+']:New Skill"/>
+	<new-skill yc-key="['n','+']:New Skill"/>
 
 </section>

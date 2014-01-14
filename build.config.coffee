@@ -82,7 +82,6 @@ module.exports =
       "vendor/d3/d3.js"
     ]
     css: [
-      "vendor/angular-tags/dist/angular-tags-0.2.10.css"
       "vendor/select2/select2.css"
     ]
     assets: [

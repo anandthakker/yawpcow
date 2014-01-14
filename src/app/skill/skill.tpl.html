@@ -1,0 +1,25 @@
+
+<!-- Skills sub-navigation. -->
+<nav id="skill-nav">
+  <ul class="nav nav-pills">
+    <li ui-route="/skill/list" ng-class="{active:$uiRoute}">
+      <a href="#/skill/list">
+        <i class="fa fa-list"></i>
+      </a>
+    </li>    
+    <li ui-route="/skill/graph" ng-class="{active:$uiRoute}">
+      <a href="#/skill/graph">
+        <i class="fa fa-sitemap"></i>
+      </a>
+    </li>    
+    <li ui-route="/skill/cards" ng-class="{active:$uiRoute}">
+      <a href="#/skill/cards">
+        <i class="fa fa-th"></i>
+      </a>
+    </li>    
+  </ul>
+</nav>
+
+<!-- skill sub-view -->
+<div ui-view/>
+<!-- /skill sub-view -->

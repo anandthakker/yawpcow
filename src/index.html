@@ -33,30 +33,40 @@
   </head>
   <body>
     <header>
-      <div class="masthead">
-        <h3 class="text-muted">YAWPCOW<small><a
-              href="#">v<%= version %></a></small>
-        </h3>
-
-        <div class="navbar navbar-default">
-              <ul class="nav navbar-nav">
-                <li ui-route="/home" ng-class="{active:$uiRoute}">
-                  <a href="#/home">
-                    <i class="fa fa-home"></i>
-                    Home
-                  </a>
-                </li>
-                <li>
-                  <a href="#/skill/list">
-                    Skills
-                  </a>
-                </li>
-              </ul>
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" 
+            ng-init="navbarCollapsed=true" 
+            ng-click="navbarCollapsed = !navbarCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <i class="fa fa-bars"></i>
+          </button>
+          <a class="navbar-brand" href="#">YAWPCOW <small>v<%= version %></small></a>
         </div>
-      </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" collapse="navbarCollapsed" id="main-navbar-content">
+          <ul class="nav navbar-nav">
+            <li ui-route="/home" ng-class="{active:$uiRoute}">
+              <a href="#/home">
+                <i class="fa fa-home"></i>
+                Home
+              </a>
+            </li>
+            <li ui-route="/skill/.*" ng-class="{active:$uiRoute}">
+              <a href="#/skill/list">
+                Skills
+              </a>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
     </header>
 
-    <section class="container" ui-view="main"></section>
+    <!-- main view -->
+    <div class="container" ui-view="main"></div>
+    <!-- /main view -->
 
     <footer class="footer">
           <div class="key-commands" 

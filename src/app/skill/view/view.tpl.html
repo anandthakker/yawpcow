@@ -1,9 +1,6 @@
-<section class="skill">
+<section id="skill-view">
 <header>
-  <nav>
-  <a href="#/skill/list" yc-key="l" class="btn btn-default">Back to List</a>
-  <a ng-href="#/skill/{{slug}}/edit" yc-key="e" class="btn btn-primary">Edit</a>
-  </nav>
+  <a ng-href="#/skill/{{slug}}/edit" yc-key="e" class="btn btn-link"><i class="fa fa-edit"/> Edit</a>
   <h1>{{skill.title}}</h1>
   <taglist tags="skill.tags" label="Tags:"/> 
 </header>

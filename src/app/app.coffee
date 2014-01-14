@@ -6,6 +6,8 @@ angular.module("yawpcow", [
   "yawpcow.about"
   "ui.router"
   "ui.route"
+  "ui.bootstrap.collapse"
+  "ui.bootstrap.dropdownToggle"
   "yawpcow.keyCommands"
 ]).config(myAppConfig = ($stateProvider, $urlRouterProvider, $logProvider) ->
   $urlRouterProvider.otherwise "/home"

@@ -30,6 +30,7 @@
 @import '../../vendor/bootstrap/less/button-groups.less';
 @import '../../vendor/bootstrap/less/dropdowns.less';
 
+@import "../../vendor/bootstrap/less/component-animations.less";
 
 /**
  * This is our main variables file. It in turn imports the `variables` file from
@@ -81,37 +82,12 @@ h2 {
   color: #666;
 }
 
-
 /**
- * Navigation
+ * Navbar
  */
 
-.navbar {
 
-  .nav {
-    margin: 0;
-    width: 100%;
 
-    li {
-      a {
-        font-weight: bold;
-        text-align: center;
-        //border-left: 1px solid rgba(255, 255, 255, 0.75);
-        border-right: 1px solid rgba(0, 0, 0, .1);
-      }
-      
-      &:first-child a {
-        border-left: 0;
-        border-radius: 3px 0 0 3px;
-      }
-      
-      &:last-child a {
-        border-right: 0;
-        border-radius: 3px 0 0 3px;
-      }
-    }
-  }
-}
 
 
 /**
@@ -120,11 +96,6 @@ h2 {
 
 .footer {
   margin-top: 80px;
-
-  .footer-inner {
-    padding: 40px 0;
-    border-top: 1px solid #DDD;
-  }
 
   .social {
     float: right;
