@@ -80,6 +80,7 @@ module.exports =
       "vendor/underscore/underscore.js"
       "vendor/mousetrap/mousetrap.js"
       "vendor/d3/d3.js"
+      "vendor/dagre-d3/build/dagre-d3.js"
     ]
     css: [
       "vendor/select2/select2.css"

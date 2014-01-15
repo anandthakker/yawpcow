@@ -1,9 +1,4 @@
 
-
-div.skill-graph {
-  position: relative;
-}
-
 .skill-graph {
   position: relative;
   width: 100%;
@@ -13,22 +8,29 @@ div.skill-graph {
     position: absolute;
     top: 0;
     bottom: 0;
+    text-rendering: geometricPrecision;
   }
 
   .node {
     rect {
-      fill: none;
+      fill: #fff;
       stroke: #000;
       stroke-width: 1px;
     }
     text {
-
+      font-size: 20px;
+    }
+    div {
+      max-width: 70px;
     }
   }
 
-  .link {
+  .edgePath path {
     fill: none;
     stroke: #000;
-    stroke-width: 1px;
+    stroke-width: 3px;
+    &:hover {
+      stroke: #f00;
+    }
   }
 }
