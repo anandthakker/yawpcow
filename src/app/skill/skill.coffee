@@ -48,10 +48,11 @@ angular.module("yawpcow.skill.main", [
     data:
       pageTitle: "Edit Skill"
 
-).directive("newSkill", ($log, $timeout, Slug, $state) ->
+).directive("addSkill", ($log, $timeout, Slug, $state) ->
   restrict: 'E'
   templateUrl: 'skill/addskill.tpl.html'
   replace: true
+  transclude: true
   link: (scope, element, attr) ->
 
     startAdd = ()->
