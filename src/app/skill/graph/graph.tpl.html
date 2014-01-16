@@ -1,8 +1,29 @@
 
 <div>
+  <button class="btn btn-link" ng-click="deleteEdges()">Delete Selected Edges</button>
+
+  <!-- add edge/create edge/cancel  -->
+  <button class="btn btn-link" 
+    ng-click="addEdge()"
+    ng-show="!addingEdge">
+      Add an Edge
+  </button>
+  <button class="btn btn-link"
+    ng-click="addEdge()"
+    ng-show="addingEdge.skill">
+      Create Edge
+  </button>
+  <button class="btn btn-link"
+    ng-click="cancelAdd()"
+    ng-show="addingEdge">
+    Cancel
+  </button>
+
   <new-skill yc-key="['n','+']:New Skill"/>
 </div>
 <div>
-  <skill-graph skill-set="skillList" />
+  <skill-graph graph="graph" 
+    redraw="redraw"
+    on-node-select="pickNode"/>
 </div>
 

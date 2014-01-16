@@ -16,12 +16,18 @@
       fill: #fff;
       stroke: #000;
       stroke-width: 1px;
+      &.selected {
+        stroke: #00F;
+      }
     }
     text {
       font-size: 20px;
     }
     div {
       max-width: 70px;
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
@@ -32,5 +38,13 @@
     &:hover {
       stroke: #f00;
     }
+    &.selected {
+      stroke: #00F;
+    }
   }
+
+  .selected * {
+    stroke: #00f !important;
+  }
+
 }
