@@ -31,20 +31,22 @@
     }
   }
 
+
   .edgePath path {
     fill: none;
     stroke: #000;
     stroke-width: 3px;
+    opacity: .5;
+    stroke-opacity: .25;
     &:hover {
+      stroke-opacity: 1;
       stroke: #f00;
-    }
-    &.selected {
-      stroke: #00F;
     }
   }
 
-  .selected * {
-    stroke: #00f !important;
+  .selected.selected * {
+    stroke: #00f;
+    stroke-opacity: 1;
   }
 
 }

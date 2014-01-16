@@ -47,6 +47,11 @@ angular.module("yawpcow.skill.graph", [
     renderer = new dagreD3.Renderer()
     # renderer.edgeInterpolate('linear')
 
+    # Override post-render to get rid of markers.
+    renderer.postRender (graph, root) ->
+
+
+
     layout = dagreD3.layout()
       .nodeSep(5)
       .rankSep(100)
