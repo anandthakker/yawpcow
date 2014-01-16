@@ -37,7 +37,6 @@ angular.module("yawpcow.skill.resource", [
       listPromise = angularFire(baseRef, scope, name
       ).then (disassociate)->
         skillList = scope[name]
-        $log.debug ["skillList", skillList]
 
         # These are linear in the # of skills, which is fine as long as we
         # don't call them on every edit.
@@ -56,9 +55,6 @@ angular.module("yawpcow.skill.resource", [
 
         updatePrereqs()
         updateTags()
-
-        $log.debug ["prereqs", prereqs]
-        $log.debug ["tags", tags]
 
         baseRef.on "child_added", ->
           updatePrereqs()

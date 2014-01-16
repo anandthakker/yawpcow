@@ -95,7 +95,12 @@ angular.module("yawpcow.skill.main", [
 ).controller("SkillCtrl",
 SkillController = ($log, $scope, $state, $stateParams, skillSet) ->
   $log.debug "SkillController"
+
+  # One of the reasons to have a parent state across the different "skill" states
+  # is that this controller bind the skill list once, rather than having each
+  # view doing it.
   skillSet.list($scope, 'skillList')
+
   $scope.prereqList = skillSet.prereqList
   $scope.tagList = skillSet.tagList
 ).controller("SkillViewEditCtrl",
