@@ -56,20 +56,26 @@ angular.module("yawpcow.keyCommands", []
     ## This is hacky, and prevents ":" from being used as an actual key binding.
     delim = attrs.ycKey.indexOf(":")
 
+    #parse yc-key attribute
     [key, desc] = if delim > 0
       [attrs.ycKey.substring(0,delim), attrs.ycKey.substring(delim+1)]
     else
       [attrs.ycKey, element.text()]
 
+    #parse key as an array if appropriate.
     if key.trim().indexOf("[") is 0
       key = scope.$eval(key)
 
+    preventDefault = true
+
     if attrs.ycKeyCommand?
-      cmd = () -> safeApply(scope, () ->
+      cmd = (e) -> safeApply(scope, () ->
+        e.preventDefault() if preventDefault
         scope.$eval(attrs.ycKeyCommand)
       )
     else if (element.prop('tagName')?.match /a/i)
-      cmd = () ->
+      cmd = (e) ->
+        e.preventDefault() if preventDefault
         if(element.prop('href')?.length > 0)
           safeApply scope, () ->
             $window.location.href = element.prop('href')
@@ -78,7 +84,10 @@ angular.module("yawpcow.keyCommands", []
           element.triggerHandler 'click'
     else
       #keeping this out of $apply because ng-click calls apply.
-      cmd = () -> element.triggerHandler 'click'
+      cmd = (e) ->
+        e.preventDefault() if preventDefault
+        element.triggerHandler 'click'
+
 
     keyCommands.bind scope, key, cmd, desc
 )
