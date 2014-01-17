@@ -107,7 +107,7 @@ angular.module("yawpcow.skill.graph", [
       draw()
 
 
-).controller("SkillGraphCtrl", SkillGraphController = ($scope) ->
+).controller("SkillGraphCtrl", SkillGraphController = ($scope, $state) ->
 
 
   createEdge = (prereq, skill) ->
@@ -168,6 +168,8 @@ angular.module("yawpcow.skill.graph", [
       e.skill = slug
     else if e?
       e.prereq = slug
+    else
+      $state.go("skill.view", {skillTitle: slug})
 
   $scope.addEdge = () ->
     e = $scope.addingEdge
