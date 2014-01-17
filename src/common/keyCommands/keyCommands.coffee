@@ -39,7 +39,7 @@ angular.module("yawpcow.keyCommands", []
     glossary: glossary
 
 ).directive("ycKey", ($log, $parse, $window, $rootScope, $location, keyCommands) ->
-  safeApply = (scope, fn) -> () ->
+  safeApply = (scope, fn) ->
     if(scope.$$phase)
       fn()
     else
@@ -53,8 +53,6 @@ angular.module("yawpcow.keyCommands", []
   we'll try to either follow the link or else trigger the click event.
   ###
   link: (scope, element, attrs) ->
-
-
     ## This is hacky, and prevents ":" from being used as an actual key binding.
     delim = attrs.ycKey.indexOf(":")
 
@@ -67,8 +65,9 @@ angular.module("yawpcow.keyCommands", []
       key = scope.$eval(key)
 
     if attrs.ycKeyCommand?
-      cmd = safeApply scope, () ->
+      cmd = () -> safeApply(scope, () ->
         scope.$eval(attrs.ycKeyCommand)
+      )
     else if (element.prop('tagName')?.match /a/i)
       cmd = () ->
         if(element.prop('href')?.length > 0)
