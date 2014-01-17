@@ -105,10 +105,16 @@ SkillController = ($log, $scope, $state, $stateParams, skillSet) ->
   $scope.prereqList = skillSet.prereqList
   $scope.tagList = skillSet.tagList
 ).controller("SkillViewEditCtrl",
-SkillViewEditController = ($log, $scope, $state, $stateParams, skillSet) ->
+SkillViewEditController = ($log, $scope, $state, $stateParams, skillSet, $window) ->
   $log.debug "SkillViewEditController"
   $scope.slug = $stateParams.skillTitle
   skillSet.get($scope, 'skill', $scope.slug)
+
+  $scope.rename = () ->
+    newTitle = $window.prompt("New title:")
+    if not newTitle? then return
+    newSlug = skillSet.rename($scope.slug, newTitle)
+    $state.go("skill.edit", {skillTitle: newSlug})
 )
 
 

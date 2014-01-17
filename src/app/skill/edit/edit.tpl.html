@@ -1,8 +1,17 @@
 <section id="edit-skill">
   <header>
-    <a ng-href="#/skill/{{slug}}/view" yc-key="['ctrl+s','mod+s']" class="btn btn-link"><i class="fa fa-check"/> Done</a>
+    <a id="btn-done" class="btn btn-link"
+      ng-href="#/skill/{{slug}}/view" 
+      yc-key="['ctrl+s','mod+s']">
+      <i class="fa fa-check"/> Done
+    </a>
     <h1>{{skill.title}}</h1>
+    <button id="btn-rename" class="btn btn-link btn-xs"
+      ng-click="rename()">
+      Rename
+    </button>
   </header>
+
   <form class="form-horizontal" role="form">
 
     <div class="form-group">

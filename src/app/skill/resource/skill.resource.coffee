@@ -89,4 +89,27 @@ angular.module("yawpcow.skill.resource", [
         skill # return skill to next promise
       , (error) -> error
 
+
+    ###
+    Rename the given skill.
+
+    @param {String} slug The (current) slug for the skill we want to rename.
+    @param {String} newTitle
+
+    @eturns {Object} the new slug.
+    ###
+    rename: (slug, newTitle) ->
+      newSlug = Slug.slugify(newTitle)
+      skill = skillList[slug]
+      skillList[newSlug] = skill
+      skill.title = newTitle
+      delete skillList[slug]
+
+      for s, skill of skillList
+        if skill.prereqs?
+          i = skill.prereqs.indexOf(slug)
+          if i>=0 then skill.prereqs[i] = newSlug
+
+      newSlug
+
 )
