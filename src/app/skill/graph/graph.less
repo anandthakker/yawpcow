@@ -1,14 +1,11 @@
 
 .skill-graph {
-  position: relative;
   width: 100%;
-  padding-bottom: 100%;
+  overflow-x: scroll;
+  text-align: center;
   svg {
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
     text-rendering: geometricPrecision;
+    display: inline;
   }
 
   .node {
@@ -24,9 +21,12 @@
       font-size: 20px;
     }
     div {
-      max-width: 70px;
       &:hover {
         cursor: pointer;
+      }
+      font-size: 8px;
+      @media (min-width: @screen-sm-min) {
+        font-size: 14px;
       }
     }
   }

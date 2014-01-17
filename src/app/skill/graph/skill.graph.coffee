@@ -71,11 +71,11 @@ angular.module("yawpcow.skill.graph", [
       rend = renderer.layout(layout).run(graph, svg.select("g"))
       svg.attr("width", rend.graph().width + 40)
         .attr("height", rend.graph().height + 40)
-      svg.call(d3.behavior.zoom().on "zoom", () ->
-        ev = d3.event
-        svg.select("g.graph")
-          .attr("transform", "translate(" + ev.translate + ") scale(" + ev.scale + ")")
-      )
+      # svg.call(d3.behavior.zoom().on "zoom", () ->
+      #   ev = d3.event
+      #   svg.select("g.graph")
+      #     .attr("transform", "translate(" + ev.translate + ") scale(" + ev.scale + ")")
+      # )
 
       styleSelected(svg)
       svg.selectAll(".edgePath path").on("click", (d,i)->scope.$apply ()->
