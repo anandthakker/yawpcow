@@ -91,6 +91,24 @@ angular.module("yawpcow.skill.resource", [
       , (error) -> error
 
 
+
+    ###
+    Delete the given skill, and remove any prerequisite dependencies on it.
+
+    ###
+
+    delete: (slugOrList) ->
+      slugs = if slugOrList instanceof Array then slugOrList else [slugOrList]
+      for s, skill of skillList
+        #no need to fix prereqs from skills we're deleting.
+        continue unless slugs.indexOf(s) < 0
+
+        if skill.prereqs?
+          skill.prereqs = _.difference(skill.prereqs, slugs)
+
+      for slug in slugs
+        delete skillList[slug]
+
     ###
     Rename the given skill.
 

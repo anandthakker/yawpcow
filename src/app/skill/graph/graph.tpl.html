@@ -1,7 +1,11 @@
 
-<div>
+<section id="skill-graph">
+<div class="admin">
+  <button class="btn btn-link" 
+    ng-click="deletingNode = !deletingNode">
+    {{ deletingNode ? "Stop" : "Start"}} Deleting Nodes
+  </button>
   <button class="btn btn-link" ng-click="deleteEdges()">Delete Selected Edges</button>
-
   <!-- add edge/create edge/cancel  -->
   <button class="btn btn-link" 
     ng-click="addEdge()"
@@ -27,3 +31,4 @@
   redraw="redraw"
   on-node-select="pickNode"/>
 
+</section>

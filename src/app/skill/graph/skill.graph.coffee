@@ -29,9 +29,9 @@ angular.module("yawpcow.skill.graph", [
   restrict: "E"
   replace: true
   template: """
-    <div class='skill-graph'>
+    <div class="graph">
       <svg width="1600">
-        <g class="graph" transform="translate(20,20)"/>
+        <g class="graph-container" transform="translate(20,20)"/>
       </svg>
     </div>
   """
@@ -73,7 +73,7 @@ angular.module("yawpcow.skill.graph", [
         .attr("height", rend.graph().height + 40)
       # svg.call(d3.behavior.zoom().on "zoom", () ->
       #   ev = d3.event
-      #   svg.select("g.graph")
+      #   svg.select("g.graph-container")
       #     .attr("transform", "translate(" + ev.translate + ") scale(" + ev.scale + ")")
       # )
 
@@ -107,7 +107,7 @@ angular.module("yawpcow.skill.graph", [
       draw()
 
 
-).controller("SkillGraphCtrl", SkillGraphController = ($scope, $state) ->
+).controller("SkillGraphCtrl", SkillGraphController = ($scope, $state, skillSet) ->
 
 
   createEdge = (prereq, skill) ->
@@ -117,16 +117,10 @@ angular.module("yawpcow.skill.graph", [
           selected: false
     )
 
-  ###
-  Set up the graph once skillList is populated.
-  ###
-  $scope.$watch "skillList", (value)->
-    if not value? then return
-    skillMap = value
-
+  buildGraph = () ->
     $scope.graph = new dagreD3.Digraph()
 
-    for slug, skill of skillMap
+    for slug, skill of $scope.skillList
       $scope.graph.addNode(slug,
         label: """
         <div>#{skill.title}</div>
@@ -135,9 +129,17 @@ angular.module("yawpcow.skill.graph", [
       )
 
     $scope.graph.eachNode (slug)->
-      return if not skillMap[slug]?.prereqs?
-      for prereq in skillMap[slug].prereqs
+      return if not $scope.skillList[slug]?.prereqs?
+      for prereq in $scope.skillList[slug].prereqs
         createEdge(prereq, slug)
+
+
+  ###
+  Set up the graph once skillList is populated.
+  ###
+  $scope.$watch "skillList", (value)->
+    if not value? then return
+    buildGraph()
 
   clearSelection = () ->
     for node in $scope.graph.nodes()
@@ -169,6 +171,9 @@ angular.module("yawpcow.skill.graph", [
       $scope.addEdge()
     else if e?
       e.prereq = slug
+    else if $scope.deletingNode
+      skillSet.delete(slug)
+      buildGraph()
     else
       $state.go("skill.view", {skillTitle: slug})
 
@@ -197,7 +202,7 @@ angular.module("yawpcow.skill.graph", [
     $scope.addingEdge = null
     clearSelection()
 
-
+  $scope.deletingNode = false
 )
 
 
