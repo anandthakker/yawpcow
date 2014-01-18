@@ -113,8 +113,9 @@ SkillViewEditController = ($log, $scope, $state, $stateParams, skillSet, $window
   $scope.rename = () ->
     newTitle = $window.prompt("New title:")
     if not newTitle? then return
-    newSlug = skillSet.rename($scope.slug, newTitle)
-    $state.go("skill.edit", {skillTitle: newSlug})
+    skillSet.rename($scope.slug, newTitle).then (newSlug) ->
+      $state.go("skill.edit", {skillTitle: newSlug})
+    , (error) -> error
 )
 
 

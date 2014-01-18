@@ -81,6 +81,7 @@ angular.module("yawpcow.skill.resource", [
     get: (scope, name, skillSlug) ->
       skillPromise = angularFire(skillRef = baseRef.child(skillSlug), scope, name
       ).then (disassociate)->
+        console.log skillSlug
         skill = scope[name]
         if not skill.tags? then skill.tags = []
         if not skill.prereqs? then skill.prereqs = []
@@ -102,6 +103,9 @@ angular.module("yawpcow.skill.resource", [
       newSlug = Slug.slugify(newTitle)
       skill = skillList[slug]
       skillList[newSlug] = skill
+      console.log "Rename"
+      console.log slug
+      console.log skillList
       skill.title = newTitle
       delete skillList[slug]
 
@@ -110,6 +114,12 @@ angular.module("yawpcow.skill.resource", [
           i = skill.prereqs.indexOf(slug)
           if i>=0 then skill.prereqs[i] = newSlug
 
-      newSlug
+      deferred = $q.defer()
 
+      baseRef.on "child_added", wait = (snapshot) ->
+        if snapshot.name() isnt newSlug then return
+        baseRef.off "child_added", wait
+        deferred.resolve(newSlug)
+
+      deferred.promise
 )
