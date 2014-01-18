@@ -5,7 +5,7 @@
 
   &>aside {
     margin-bottom: 20px;
-    &>h1 {
+    h1 {
       margin-top: (@line-height-computed / 2);
       margin-bottom: (@line-height-computed / 4);
       .small;
@@ -14,17 +14,7 @@
       text-transform: uppercase;
     }
     .text-muted;
-  }
 
-  ul {
-    display: inline;
-    list-style: none;
-    margin-left: 0px;
-    padding-left: 0px;
-    &>li {
-      display: inline-block;
-      padding-right: 5px;
-    }
+    ul {.list-inline;}
   }
-
 }

@@ -2,9 +2,9 @@
 <header>
   <a ng-href="#/skill/{{slug}}/edit" yc-key="e" class="btn btn-link"><i class="fa fa-edit"/> Edit</a>
   <h1>{{skill.title}}</h1>
-  <taglist tags="skill.tags" label="Tags:"/> 
 </header>
 <aside>
+  <taglist tags="skill.tags" label="Tags:"/> 
   <h1>Prerequisites:</h1>
   <ul ng-show="skill.prereqs.length > 0">
     <li ng-repeat="req in skill.prereqs">
