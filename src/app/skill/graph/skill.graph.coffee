@@ -166,6 +166,7 @@ angular.module("yawpcow.skill.graph", [
     e = $scope.addingEdge
     if e?.prereq?
       e.skill = slug
+      $scope.addEdge()
     else if e?
       e.prereq = slug
     else
@@ -185,7 +186,7 @@ angular.module("yawpcow.skill.graph", [
       createEdge(e.prereq, e.skill)
 
       # Reset/redraw
-      $scope.addingEdge = null
+      $scope.addingEdge = {}
       clearSelection()
       $scope.redraw()
 
