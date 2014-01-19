@@ -4,53 +4,46 @@ angular.module("yawpcow.skill.resource", [
   "firebase"
 ]
 ).config(config = () ->
-).factory('Skills', ($log, skillResourceUrl, angularFire, Slug, $q, $rootScope) ->
+).factory('Skills', ($log, skillResourceUrl, $firebase, Slug, $q, $rootScope) ->
+
+  listDeferred = $q.defer()
+  listPromise = listDeferred.promise
 
   baseRef = new Firebase(skillResourceUrl)
-  skillMap = {}
   prereqs = []
   tags = []
 
-  name = "skillMap"
+  skillMap = $firebase(baseRef)
 
-  update = ()->
-    $log.debug "Updating skill list"
-    skillMap = $rootScope[name]
+  updatePrereqs = () ->
+    prereqs.length = 0
+    prereqs.push.apply prereqs, (slug for slug,skill of skillMap)
+  updateTags = () ->
+    tags.length = 0
+    tags.push.apply tags, _.compose(
+      _.uniq,
+      _.compact,
+      _.flatten,
+      ((array)->_.pluck(array,'tags')),
+      _.values
+    ) skillMap
 
-    # These are linear in the # of skills, which is fine as long as we
-    # don't call them on every edit.
-    updatePrereqs = () ->
-      prereqs.length = 0
-      prereqs.push.apply prereqs, (slug for slug,skill of skillMap)
-    updateTags = () ->
-      tags.length = 0
-      tags.push.apply tags, _.compose(
-        _.uniq,
-        _.compact,
-        _.flatten,
-        ((array)->_.pluck(array,'tags')),
-        _.values
-      ) skillMap
+  skillMap.$on "loaded", ()->
+    $log.debug "Skill list loaded"
+    updatePrereqs()
+    updateTags()
+    listDeferred.resolve()
 
+  i = 0
+  skillMap.$on "change", () ->
     updatePrereqs()
     updateTags()
 
-    baseRef.on "child_added", ->
-      updatePrereqs()
-      updateTags()
 
-    baseRef.on "child_removed", ->
-      updatePrereqs()
-      updateTags()
 
-    skillMap
-
-  angularFire(baseRef, $rootScope, name).then (disassociate)->
-    $rootScope.$watch name, (newValue,oldValue) ->
-      if newValue?
-        update()
 
   Skills =
+
     ###
     @property A list of legitimate prerequisites.
     ###
@@ -62,10 +55,25 @@ angular.module("yawpcow.skill.resource", [
     tagList: tags
 
 
+
     ###
-    @property
+    @returns {Object} A promise that resolves to an ordered list of skill id's (slugs)
     ###
-    map: skillMap
+    list: () ->
+      deferred = $q.defer()
+      listPromise = listPromise.then ()->
+        deferred.resolve(skillMap.$getIndex())
+      deferred.promise
+
+    ###
+    @returns {Object} A promise that resolves to an object mapping slug->skill object.
+    ###
+    map: () ->
+      deferred = $q.defer()
+      listPromise = listPromise.then ()->
+        deferred.resolve(skillMap)
+      deferred.promise
+
 
 
     ###
@@ -89,32 +97,36 @@ angular.module("yawpcow.skill.resource", [
         deferred.resolve(slug)
 
       skillMap[slug] = skill
+      skillMap.$save(slug)
 
       deferred.promise
 
+    ###
+    Get a particular skill
+
+    @param {String} slug The slugified name of the skill to fetch
+
+    @returns {Object} a skill object
+    ###
+    get: (slug) ->
+      skillMap[slug]
 
     ###
-    Get a particular skill and bind it to the given property (name) of the given scope.
+    Bind a skill object to the given scope.
 
-    @param {Object} scope The scope to which to bind the skill list
-    @param {String} name The name to bind the skill list to in the given scope.
-    @param {String} skillSlug The slugified name of the skill to fetch
-
-    @returns {Object} a promise that yields the skill object
+    @returns {Object} a promise that will be resolved with the bound skill.
     ###
-    get: (scope, name, skillSlug) ->
-      skillPromise = angularFire(skillRef = baseRef.child(skillSlug), scope, name
-      ).then (disassociate)->
-        console.log skillSlug
-        skill = scope[name]
-        if not skill.tags? then skill.tags = []
-        if not skill.prereqs? then skill.prereqs = []
-        $log.debug skill
-
-        skill # return skill to next promise
-      , (error) -> error
+    bind: (scope, name, slug) ->
+      skill = skillMap.$child(slug)
+      skill.$bind(scope, name).then (unbind)->
+        skill
 
 
+    ###
+    Save a skill remotely.
+    ###
+    save: (slug) ->
+      skillMap.$save(slug)
 
     ###
     Delete the given skill, and remove any prerequisite dependencies on it.
@@ -130,9 +142,10 @@ angular.module("yawpcow.skill.resource", [
 
         if skill.prereqs?
           skill.prereqs = _.difference(skill.prereqs, slugs)
+          skillMap.$save(s)
 
       for slug in slugs
-        delete skillMap[slug]
+        skillMap.$remove(slug)
 
     ###
     Rename the given skill.
@@ -149,19 +162,22 @@ angular.module("yawpcow.skill.resource", [
       newSlug = Slug.slugify(newTitle)
       skillMap[newSlug] = skill
       skill.title = newTitle
-      delete skillMap[slug]
-
-      for s, skill of skillMap
-        if skill.prereqs?
-          i = skill.prereqs.indexOf(slug)
-          if i>=0 then skill.prereqs[i] = newSlug
 
       deferred = $q.defer()
-
       baseRef.on "child_added", wait = (snapshot) ->
         if snapshot.name() isnt newSlug then return
         baseRef.off "child_added", wait
         deferred.resolve(newSlug)
+
+      skillMap.$remove(slug)
+
+      # Remap prerequisites to new slug.
+      for s, skill of skillMap
+        if skill.prereqs?
+          i = skill.prereqs.indexOf(slug)
+          if i>=0 then skill.prereqs[i] = newSlug
+          skillMap.$save(s)
+
 
       deferred.promise
 )

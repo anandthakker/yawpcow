@@ -8,10 +8,13 @@ angular.module("yawpcow.skill.cards", [
   templateUrl: "skill/cards/cards.tpl.html"
   data:
     pageTitle: "Skills"
-).directive("skillCard", ()->
+).directive("skillCard", (Skills)->
   restrict: 'E'
   templateUrl: "skill/view/view.tpl.html"
   replace: true
-).controller("SkillCardsCtrl", SkillCardsController = ($scope) ->
-
+  link: (scope, element, attrs) ->
+    scope.skill = Skills.get(scope.slug)
+).controller("SkillCardsCtrl", SkillCardsController = ($scope, Skills) ->
+  Skills.list().then (list) ->
+    $scope.slugs = list
 )

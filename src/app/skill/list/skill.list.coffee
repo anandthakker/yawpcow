@@ -15,6 +15,10 @@ angular.module("yawpcow.skill.list", [
 
 ).controller("SkillListCtrl",
 SkillListController = ($scope, Skills) ->
+  Skills.list().then (list) ->
+    $scope.slugs = list
+    
+  $scope.get = Skills.get
   $scope.selected = {}
   $scope.delete = (slugOrList) ->
     Skills.delete(slugOrList)

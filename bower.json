@@ -10,7 +10,7 @@
     "angular-ui-bootstrap": "#bootstrap3",
     "angular-ui-router": "~0.2.0",
     "angular-ui-utils": "~0.0.3",
-    "angular-fire": "~0.3.1",
+    "angularfire": "~0.6.0",
     "angular-slugify": "~1.0.0",
     "angular-sanitize": "~1.2.3",
     "textAngular": "~1.1.1",

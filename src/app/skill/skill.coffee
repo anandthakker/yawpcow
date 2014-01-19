@@ -92,7 +92,7 @@ SkillController = ($log, $scope, $state, $stateParams, Skills) ->
 SkillViewEditController = ($log, $scope, $state, $stateParams, Skills, $window) ->
   $log.debug "SkillViewEditController"
   $scope.slug = $stateParams.skillTitle
-  Skills.get($scope, 'skill', $scope.slug)
+  Skills.bind($scope, 'skill', $scope.slug)
 
   $scope.rename = () ->
     newTitle = $window.prompt("New title:")

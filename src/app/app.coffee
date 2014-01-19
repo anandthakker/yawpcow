@@ -14,6 +14,7 @@ angular.module("yawpcow", [
   $logProvider.debugEnabled true
 ).run(run = ->
 ).value('skillResourceUrl', 'https://yawpcow.firebaseio.com/skills/v1'
+).value('linksResourceUrl', 'https://yawpcow.firebaseio.com/links/v1'
 ).controller "AppCtrl", AppCtrl = ($scope, $location, keyCommands, $log) ->
   
   $scope.keyCommandGlossary = keyCommands.glossary

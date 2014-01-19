@@ -163,29 +163,28 @@ angular.module("yawpcow.skill.graph", [
     )
 
   buildGraph = () ->
-    $scope.graph = new dagreD3.Digraph()
 
-    for slug, skill of $scope.skillMap
-      $scope.graph.addNode(slug,
-        label: """
-        <div>#{skill.title}</div>
-        """
-        selected: false
-        tags: skill.tags
-      )
+    Skills.list().then (list)->
+      $scope.graph = new dagreD3.Digraph()
+      for slug in list
+        $scope.graph.addNode(slug,
+          label: """
+          <div>#{Skills.get(slug).title}</div>
+          """
+          selected: false
+          tags: Skills.get(slug).tags
+        )
 
-    $scope.graph.eachNode (slug)->
-      return if not $scope.skillMap[slug]?.prereqs?
-      for prereq in $scope.skillMap[slug].prereqs
-        createEdge(prereq, slug)
+      $scope.graph.eachNode (slug)->
+        return if not Skills.get(slug)?.prereqs?
+        for prereq in Skills.get(slug).prereqs
+          createEdge(prereq, slug)
 
 
   ###
-  Set up the graph once skillMap is populated.
+  Set up the graph once skills have loaded
   ###
-  $scope.$watch "skillMap", (value)->
-    if not value? then return
-    buildGraph()
+  buildGraph()
 
   ###
   Interactions
@@ -201,9 +200,10 @@ angular.module("yawpcow.skill.graph", [
     for edgeId in $scope.graph.edges()
       edge = $scope.graph.edge(edgeId)
       if(edge.selected)
-        skill = $scope.skillMap[edge.skill]
+        skill = Skills.get(edge.skill)
         i = skill.prereqs.indexOf(edge.prereq)
         skill.prereqs.splice(i,1)
+        Skills.save(edge.skill)
         $scope.graph.delEdge(edgeId)
         $scope.redraw()
 
@@ -242,10 +242,11 @@ angular.module("yawpcow.skill.graph", [
     if e?.skill? and e?.prereq?
 
       # Add prerequisite to the skill
-      skill = $scope.skillMap[e.skill]
+      skill = Skills.get(e.skill)
       if not skill.prereqs? then skill.prereqs = []
       if skill.prereqs.indexOf(e.prereq) >= 0 then return # Bail if prereq exists.
       skill.prereqs.push(e.prereq)
+      Skills.save(e.skill)
 
       # Add the edge to the graph
       createEdge(e.prereq, e.skill)
