@@ -209,7 +209,7 @@ angular.module("yawpcow.skill.graph", [
 
   $scope.nodeClick = (slug) ->
     if $scope.addingEdge?
-      addEdgeSelect()
+      addEdgeSelect(slug)
     else if $scope.deletingNode
       skillSet.delete(slug)
       buildGraph()
@@ -229,7 +229,7 @@ angular.module("yawpcow.skill.graph", [
   # addingEdge == {} or {prereq:___} --> in the process of adding an edge.
   # addingEdge == {prereq:___, skill: ___} --> ready to create the new edge.
   $scope.addingEdge = null
-  addEdgeSelect = () ->
+  addEdgeSelect = (slug) ->
     e = $scope.addingEdge
     if e?.prereq?
       e.skill = slug
