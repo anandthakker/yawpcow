@@ -39,8 +39,8 @@
     fill: none;
     stroke: #000;
     stroke-width: 3px;
-    opacity: .5;
-    stroke-opacity: .25;
+    opacity: .25;
+    stroke-opacity: .15;
     &:hover {
       stroke-opacity: 1;
       stroke: #f00;
@@ -48,32 +48,35 @@
   }
 
   .tag-HTML {
-    fill: #F80;
     fill-opacity: .20;
+    fill: #F80;
     stroke: #F80;
   }
   .tag-CSS {
-    fill: #0AF;
     fill-opacity: .20;
+    fill: #0AF;
     stroke: #0AF;
+  }
+  .tag-making {
+    fill-opacity: .20;
+    fill: #0FC;
+    stroke: #0FC;
   }
 
 
   .selected * {
     stroke-opacity: 1;
-    fill-opacity: .75;
+    fill-opacity: .7;
   }
 
   .selected-prerequisite * {
-    stroke: #088;
     stroke-opacity: 1;
-    fill-opacity: .75;
+    fill-opacity: .5;
   }
 
   .selected-sequel * {
-    stroke: #808;
     stroke-opacity: 1;
-    fill-opacity: .75;
+    fill-opacity: .5;
   }
 
 }
