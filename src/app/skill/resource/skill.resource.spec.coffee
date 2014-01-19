@@ -34,7 +34,7 @@ xdescribe "Skill resource (backend interface)", ->
       listProp: "skillListTest"
       skillProp: "skillTest"
     runs ->
-      inject ($rootScope, skillSet)->
+      inject ($rootScope, Skills)->
         skillSet.list($rootScope, locals.listProp)
         expect($rootScope[locals.listProp]).toBeDefined()
         $rootScope[locals.listProp]["skill-1"] = blankSkill
@@ -46,12 +46,12 @@ xdescribe "Skill resource (backend interface)", ->
     waits 5000
 
     runs ->
-      inject ($rootScope, skillSet)->
+      inject ($rootScope, Skills)->
         expect($rootScope[locals.skillProp]).toEqual(blankSkill)
         $rootScope[locals.skillProp].content = "updated content"
 
     waits 5000
 
     runs ->
-      inject ($rootScope, skillSet)->
+      inject ($rootScope, Skills)->
         expect($rootScope[locals.listProp]["skill-1"]).not.toEqual(blankSkill)

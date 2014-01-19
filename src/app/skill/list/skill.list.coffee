@@ -14,8 +14,8 @@ angular.module("yawpcow.skill.list", [
       pageTitle: "Skills"
 
 ).controller("SkillListCtrl",
-SkillListController = ($scope, skillSet) ->
+SkillListController = ($scope, Skills) ->
   $scope.selected = {}
   $scope.delete = (slugOrList) ->
-    skillSet.delete(slugOrList)
+    Skills.delete(slugOrList)
 )

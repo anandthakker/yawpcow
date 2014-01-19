@@ -1,6 +1,6 @@
 describe "skills section", ->
 
-  # Mock the skillSet service
+  # Mock the Skills service
   skillList =
     skill1:
       title: "Skill 1"
@@ -13,7 +13,7 @@ describe "skills section", ->
       prereqs: []
       tags: ["HTML", "CSS"]
 
-  skillSet =
+  Skills =
     prereqList: ['skill1', 'skill2']
     tagList: ['HTML', 'CSS']
     list: (scope, name) ->
@@ -24,7 +24,7 @@ describe "skills section", ->
       # should return promise
 
   beforeEach () ->
-    angular.module("yawpcow.skill.resource", []).factory "skillSet", () -> skillSet
+    angular.module("yawpcow.skill.resource", []).factory "Skills", () -> Skills
 
   beforeEach module("yawpcow.skill.resource", "yawpcow.skill")
 
@@ -36,14 +36,13 @@ describe "skills section", ->
       expect($state.get "skill.edit").not.toBeNull()
 
   describe "SkillCtrl", ->
-    it "should bind the skill list, tag list, and prereq list to the scope", ->
+    it "should bind the tag list, and prereq list to the scope", ->
       scope = {}
       inject ($controller) ->
         $controller "SkillCtrl", {$scope: scope}
 
-      expect(scope.skillList).toEqual(skillList)
-      expect(scope.tagList).toEqual(skillSet.tagList)
-      expect(scope.prereqList).toEqual(skillSet.prereqList)
+      expect(scope.tagList).toEqual(Skills.tagList)
+      expect(scope.prereqList).toEqual(Skills.prereqList)
 
   describe "SkillViewEditCtrl", ->
     it "should bind the skill indicated by state params to the scope", ->

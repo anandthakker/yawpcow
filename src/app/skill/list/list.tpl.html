@@ -2,7 +2,7 @@
 
 <section id="skill-list">
 	<ul class="skills list-unstyled">
-		<li ng-repeat="(slug,skill) in skillList">
+		<li ng-repeat="(slug,skill) in skillMap">
       <input type="checkbox" ng-model="selected[slug]" tabindex="1" autofocus>
       <div>
         <a ng-href="#/skill/{{slug}}/view">{{skill.title}}</a> 

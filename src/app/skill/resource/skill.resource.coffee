@@ -4,15 +4,53 @@ angular.module("yawpcow.skill.resource", [
   "firebase"
 ]
 ).config(config = () ->
-).factory('skillSet', ($log, skillResourceUrl, angularFire, Slug, $q) ->
-  # No need to make this a class for now, since we only need a singleton.
+).factory('Skills', ($log, skillResourceUrl, angularFire, Slug, $q, $rootScope) ->
 
   baseRef = new Firebase(skillResourceUrl)
-  skillList = {}
+  skillMap = {}
   prereqs = []
   tags = []
 
-  skillSet =
+  name = "skillMap"
+
+  update = ()->
+    $log.debug "Updating skill list"
+    skillMap = $rootScope[name]
+
+    # These are linear in the # of skills, which is fine as long as we
+    # don't call them on every edit.
+    updatePrereqs = () ->
+      prereqs.length = 0
+      prereqs.push.apply prereqs, (slug for slug,skill of skillMap)
+    updateTags = () ->
+      tags.length = 0
+      tags.push.apply tags, _.compose(
+        _.uniq,
+        _.compact,
+        _.flatten,
+        ((array)->_.pluck(array,'tags')),
+        _.values
+      ) skillMap
+
+    updatePrereqs()
+    updateTags()
+
+    baseRef.on "child_added", ->
+      updatePrereqs()
+      updateTags()
+
+    baseRef.on "child_removed", ->
+      updatePrereqs()
+      updateTags()
+
+    skillMap
+
+  angularFire(baseRef, $rootScope, name).then (disassociate)->
+    $rootScope.$watch name, (newValue,oldValue) ->
+      if newValue?
+        update()
+
+  Skills =
     ###
     @property A list of legitimate prerequisites.
     ###
@@ -23,53 +61,36 @@ angular.module("yawpcow.skill.resource", [
     ###
     tagList: tags
 
+
     ###
-    Get the skill list and bind it to the given property (name) of the given scope.
-    (this is an artifact of angularFire's API--not necessarily how i'd have designed it, but
-    worth it not to reinvent the wheel)
-
-    @param {Object} scope The scope to which to bind the skill list
-    @param {String} name The name to bind the skill list to in the given scope.
-
-    @returns {Object} a promise that yields the skillList (a slug->skill object map)
+    @property
     ###
-    list: (scope, name) ->
-      update = ()->
-        $log.debug "Updating skill list"
-        skillList = scope[name]
+    map: skillMap
 
-        # These are linear in the # of skills, which is fine as long as we
-        # don't call them on every edit.
-        updatePrereqs = () ->
-          prereqs.length = 0
-          prereqs.push.apply prereqs, (slug for slug,skill of skillList)
-        updateTags = () ->
-          tags.length = 0
-          tags.push.apply tags, _.compose(
-            _.uniq,
-            _.compact,
-            _.flatten,
-            ((array)->_.pluck(array,'tags')),
-            _.values
-          ) skillList
 
-        updatePrereqs()
-        updateTags()
+    ###
+    Create a new skill with the given title.
 
-        baseRef.on "child_added", ->
-          updatePrereqs()
-          updateTags()
+    @param {String} title
+    @returns {Object} A promise that yields the slug of the new skill.
+    ###
+    create: (title) ->
+      skill =
+        title: title
+        prereqs: []
+        tags: []
+        content: ""
+      slug = Slug.slugify(title)
 
-        baseRef.on "child_removed", ->
-          updatePrereqs()
-          updateTags()
+      deferred = $q.defer()
+      baseRef.on "child_added", wait = (snapshot) ->
+        if snapshot.name() isnt slug then return
+        baseRef.off "child_added", wait
+        deferred.resolve(slug)
 
-        skillList
+      skillMap[slug] = skill
 
-      listPromise = angularFire(baseRef, scope, name).then (disassociate)->
-        scope.$watch name, (newValue,oldValue) ->
-          if newValue?
-            update()
+      deferred.promise
 
 
     ###
@@ -98,11 +119,12 @@ angular.module("yawpcow.skill.resource", [
     ###
     Delete the given skill, and remove any prerequisite dependencies on it.
 
+    TODO: return a promise object that resolves when the delete is over.
     ###
 
     delete: (slugOrList) ->
       slugs = if slugOrList instanceof Array then slugOrList else [slugOrList]
-      for s, skill of skillList
+      for s, skill of skillMap
         #no need to fix prereqs from skills we're deleting.
         continue unless slugs.indexOf(s) < 0
 
@@ -110,7 +132,7 @@ angular.module("yawpcow.skill.resource", [
           skill.prereqs = _.difference(skill.prereqs, slugs)
 
       for slug in slugs
-        delete skillList[slug]
+        delete skillMap[slug]
 
     ###
     Rename the given skill.
@@ -121,15 +143,15 @@ angular.module("yawpcow.skill.resource", [
     @eturns {Object} the new slug.
     ###
     rename: (slug, newTitle) ->
-      skill = skillList[slug]
-      if not skill? then throw {message: "Could not find #{slug}.", list: skillList}
+      skill = skillMap[slug]
+      if not skill? then throw {message: "Could not find #{slug}.", list: skillMap}
 
       newSlug = Slug.slugify(newTitle)
-      skillList[newSlug] = skill
+      skillMap[newSlug] = skill
       skill.title = newTitle
-      delete skillList[slug]
+      delete skillMap[slug]
 
-      for s, skill of skillList
+      for s, skill of skillMap
         if skill.prereqs?
           i = skill.prereqs.indexOf(slug)
           if i>=0 then skill.prereqs[i] = newSlug

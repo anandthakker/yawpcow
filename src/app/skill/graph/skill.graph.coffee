@@ -152,7 +152,7 @@ angular.module("yawpcow.skill.graph", [
       draw()
 
 
-).controller("SkillGraphCtrl", SkillGraphController = ($scope, $state, skillSet, Slug) ->
+).controller("SkillGraphCtrl", SkillGraphController = ($scope, $state, Skills, Slug) ->
 
 
   createEdge = (prereq, skill) ->
@@ -165,7 +165,7 @@ angular.module("yawpcow.skill.graph", [
   buildGraph = () ->
     $scope.graph = new dagreD3.Digraph()
 
-    for slug, skill of $scope.skillList
+    for slug, skill of $scope.skillMap
       $scope.graph.addNode(slug,
         label: """
         <div>#{skill.title}</div>
@@ -175,15 +175,15 @@ angular.module("yawpcow.skill.graph", [
       )
 
     $scope.graph.eachNode (slug)->
-      return if not $scope.skillList[slug]?.prereqs?
-      for prereq in $scope.skillList[slug].prereqs
+      return if not $scope.skillMap[slug]?.prereqs?
+      for prereq in $scope.skillMap[slug].prereqs
         createEdge(prereq, slug)
 
 
   ###
-  Set up the graph once skillList is populated.
+  Set up the graph once skillMap is populated.
   ###
-  $scope.$watch "skillList", (value)->
+  $scope.$watch "skillMap", (value)->
     if not value? then return
     buildGraph()
 
@@ -201,7 +201,7 @@ angular.module("yawpcow.skill.graph", [
     for edgeId in $scope.graph.edges()
       edge = $scope.graph.edge(edgeId)
       if(edge.selected)
-        skill = $scope.skillList[edge.skill]
+        skill = $scope.skillMap[edge.skill]
         i = skill.prereqs.indexOf(edge.prereq)
         skill.prereqs.splice(i,1)
         $scope.graph.delEdge(edgeId)
@@ -211,7 +211,7 @@ angular.module("yawpcow.skill.graph", [
     if $scope.addingEdge?
       addEdgeSelect(slug)
     else if $scope.deletingNode
-      skillSet.delete(slug)
+      Skills.delete(slug)
       buildGraph()
     else if $scope.graph.node(slug).selected
       # we want only one node selected at a time, so if
@@ -242,7 +242,7 @@ angular.module("yawpcow.skill.graph", [
     if e?.skill? and e?.prereq?
 
       # Add prerequisite to the skill
-      skill = $scope.skillList[e.skill]
+      skill = $scope.skillMap[e.skill]
       if not skill.prereqs? then skill.prereqs = []
       if skill.prereqs.indexOf(e.prereq) >= 0 then return # Bail if prereq exists.
       skill.prereqs.push(e.prereq)
