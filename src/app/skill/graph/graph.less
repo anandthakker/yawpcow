@@ -15,18 +15,15 @@
     display: inline;
   }
 
+  rect {
+    fill: #fff;
+    stroke: #000;
+    stroke-width: 1px;
+  }
+  text {
+    font-size: 20px;
+  }
   .node {
-    rect {
-      fill: #fff;
-      stroke: #000;
-      stroke-width: 1px;
-      &.selected {
-        stroke: #00F;
-      }
-    }
-    text {
-      font-size: 20px;
-    }
     div {
       &:hover {
         cursor: pointer;
@@ -37,9 +34,7 @@
       }
     }
   }
-
-
-  .edgePath path {
+  path {
     fill: none;
     stroke: #000;
     stroke-width: 3px;
@@ -51,9 +46,18 @@
     }
   }
 
-  .selected.selected * {
+
+  .selected * {
     stroke: #00f;
     stroke-opacity: 1;
+  }
+
+  .selected-prerequisite * {
+    stroke: #088;
+  }
+
+  .selected-sequel * {
+    stroke: #808;
   }
 
 }

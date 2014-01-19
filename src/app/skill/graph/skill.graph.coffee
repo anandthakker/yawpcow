@@ -23,8 +23,6 @@ angular.module("yawpcow.skill.graph", [
   Adds class "selected-sequel" to the sequel nodes (and the corresponding
     edges) of the selected node.
 
-  Likewise class "hover-prerequisite" and "hover-sequel" on hover.
-
   Attributes:
     graph: the graph object
     redraw: directive (link) will set this to a callback that redraws the graph.
@@ -63,12 +61,34 @@ angular.module("yawpcow.skill.graph", [
       .rankSep(100)
 
     styleSelected = (svg) ->
+      gr = scope.graph
       svg.selectAll(".node").classed("selected", (d)->
-        scope.graph.node(d).selected
+        gr.node(d).selected
       )
       svg.selectAll(".edgePath").classed("selected", (d)->
-        scope.graph.edge(d).selected
+        gr.edge(d).selected
       )
+
+      svg.selectAll(".edgePath").classed("selected-prerequisite", (d)->
+        return gr.node(gr.target(d)).selected
+      )
+      svg.selectAll(".node").classed("selected-prerequisite", (d)->
+        seqEdges = gr.outEdges(d)
+        for e in seqEdges
+          if gr.node(gr.target(e)).selected then return true
+        false
+      )
+
+      svg.selectAll(".edgePath").classed("selected-sequel", (d)->
+        return gr.node(gr.source(d)).selected
+      )
+      svg.selectAll(".node").classed("selected-sequel", (d)->
+        preEdges = gr.inEdges(d)
+        for e in preEdges
+          if gr.node(gr.source(e)).selected then return true
+        false
+      )
+
 
     draw = () ->
       graph = scope.graph
