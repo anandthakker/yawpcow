@@ -17,13 +17,21 @@ angular.module("yawpcow.skill.graph", [
   Renders a graph (http://cpettitt.github.io/project/graphlib) using
   dagre-d3.
 
+  Adds class "selected" to selected edges and nodes.
+  Adds class "selected-prerequisite" to the prerequisite nodes (and the
+    corresponding edges) of the selected node.
+  Adds class "selected-sequel" to the sequel nodes (and the corresponding
+    edges) of the selected node.
+
+  Likewise class "hover-prerequisite" and "hover-sequel" on hover.
+
   Attributes:
     graph: the graph object
     redraw: directive (link) will set this to a callback that redraws the graph.
-    on-node-select: function to be called (with node-id as parameter) when a node is
-      selected.
-    on-edge-select: function to be called (with edge id as parameter) when an edge is
-      selected.
+    on-node-click: function to be called (with node-id as parameter) when a node is
+      selected or deselected.
+    on-edge-click: function to be called (with edge id as parameter) when an edge is
+      selected or deselected.
   ###
 
   restrict: "E"
@@ -39,8 +47,8 @@ angular.module("yawpcow.skill.graph", [
   scope:
     graph: "="
     redraw: "=" # This directive's link function will set
-    onNodeSelect: "="
-    onEdgeSelect: "="
+    onNodeClick: "="
+    onEdgeClick: "="
 
   link: (scope, element, attr)->
 
@@ -49,8 +57,6 @@ angular.module("yawpcow.skill.graph", [
 
     # Override post-render to get rid of markers.
     renderer.postRender (graph, root) ->
-
-
 
     layout = dagreD3.layout()
       .nodeSep(5)
@@ -81,8 +87,8 @@ angular.module("yawpcow.skill.graph", [
       svg.selectAll(".edgePath path").on("click", (d,i)->scope.$apply ()->
         edge = graph.edge(d)
         edge.selected = not edge.selected
+        if scope.onEdgeClick? then scope.onEdgeClick(d)
         styleSelected(svg)
-        if scope.onEdgeSelect? then scope.onEdgeSelect(d)
       )
       svg.selectAll(".node").each () ->
         # the data is on the rect elements
@@ -91,8 +97,8 @@ angular.module("yawpcow.skill.graph", [
         d3.select(this).select("div").on("click", ()->scope.$apply ()->
           node = graph.node(d)
           node.selected = not node.selected
+          if scope.onNodeClick? then scope.onNodeClick(d)
           styleSelected(svg)
-          if scope.onNodeSelect? then scope.onNodeSelect(d)
         )
 
 
@@ -141,6 +147,9 @@ angular.module("yawpcow.skill.graph", [
     if not value? then return
     buildGraph()
 
+  ###
+  Interactions
+  ###
   clearSelection = () ->
     for node in $scope.graph.nodes()
       $scope.graph.node(node).selected = false
@@ -158,24 +167,35 @@ angular.module("yawpcow.skill.graph", [
         $scope.graph.delEdge(edgeId)
         $scope.redraw()
 
+  $scope.nodeClick = (slug) ->
+    if $scope.addingEdge?
+      addEdgeSelect()
+    else if $scope.deletingNode
+      skillSet.delete(slug)
+      buildGraph()
+    else if $scope.graph.node(slug).selected
+      # we want only one node selected at a time, so if
+      # this one was just selected, clear other selections.
+      $scope.graph.eachNode (s, value)->
+        if value.selected and (s isnt slug) then value.selected = false
+    else
+      $state.go("skill.view", {skillTitle: slug})
+
+
+  $scope.deletingNode = false
 
   # Very primitive "Add an Edge" logic:
   # addingEdge == null --> not in the process of adding an edge.
   # addingEdge == {} or {prereq:___} --> in the process of adding an edge.
   # addingEdge == {prereq:___, skill: ___} --> ready to create the new edge.
   $scope.addingEdge = null
-  $scope.pickNode = (slug) ->
+  addEdgeSelect = () ->
     e = $scope.addingEdge
     if e?.prereq?
       e.skill = slug
       $scope.addEdge()
     else if e?
       e.prereq = slug
-    else if $scope.deletingNode
-      skillSet.delete(slug)
-      buildGraph()
-    else
-      $state.go("skill.view", {skillTitle: slug})
 
   $scope.addEdge = () ->
     e = $scope.addingEdge
@@ -202,7 +222,6 @@ angular.module("yawpcow.skill.graph", [
     $scope.addingEdge = null
     clearSelection()
 
-  $scope.deletingNode = false
 )
 
 
