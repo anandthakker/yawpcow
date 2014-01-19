@@ -44,7 +44,7 @@ describe "skills section", ->
       expect(scope.tagList).toEqual(Skills.tagList)
       expect(scope.prereqList).toEqual(Skills.prereqList)
 
-  describe "SkillViewEditCtrl", ->
+  xdescribe "SkillViewEditCtrl", ->
     it "should bind the skill indicated by state params to the scope", ->
       scope = {}
       title = null

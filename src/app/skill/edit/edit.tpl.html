@@ -36,6 +36,25 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label for="reading">Reading</label>
+      <div class="form-input">
+        <div ng-repeat="l in skill.reading">
+          <yc-link-input link-id="l" on-remove="removeReading"/>
+        </div>
+        <yc-add-link-input on-added="addReading"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="reading">Practice</label>
+      <div class="form-input">
+        <div ng-repeat="l in skill.practice">
+          <yc-link-input link-id="l" on-remove="removePractice"/>
+        </div>
+        <yc-add-link-input on-added="addPractice"/>
+      </div>
+    </div>
   </form>
 
 </section>

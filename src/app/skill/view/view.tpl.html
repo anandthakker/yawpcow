@@ -15,7 +15,20 @@
     None
   </span>
 </aside>
-<article ng-bind-html="skill.content">
+<article>
+  <section ng-bind-html="skill.content">
+  </section>
+  <ul>
+    <li ng-repeat="l in skill.reading">
+      <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>
+    </li>
+  </ul>
+  <ul>
+    <li ng-repeat="l in skill.practice">
+      <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>
+    </li>
+  </ul>
 </article>
+
 </section>
 

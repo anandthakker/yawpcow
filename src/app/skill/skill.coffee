@@ -17,6 +17,8 @@ angular.module("yawpcow.skill.main", [
   "ui.router"
   "slugifier"
   "yawpcow.skill.resource"
+  "yawpcow.links"
+  "yawpcow.links.resource"
   "yawpcow.skill.taglist"
   "ngSanitize"
   "textAngular"
@@ -89,7 +91,7 @@ SkillController = ($log, $scope, $state, $stateParams, Skills) ->
   $scope.tagList = Skills.tagList
 
 ).controller("SkillViewEditCtrl",
-SkillViewEditController = ($log, $scope, $state, $stateParams, Skills, $window) ->
+SkillViewEditController = ($log, $scope, $state, $stateParams, Skills, Links, $window) ->
   $log.debug "SkillViewEditController"
   $scope.slug = $stateParams.skillTitle
   Skills.bind($scope, 'skill', $scope.slug)
@@ -100,6 +102,25 @@ SkillViewEditController = ($log, $scope, $state, $stateParams, Skills, $window) 
     Skills.rename($scope.slug, newTitle).then (newSlug) ->
       $state.go("skill.edit", {skillTitle: newSlug})
     , (error) -> error
+
+  $scope.getLink = (id) ->
+    Links.get(id)
+
+
+  ###
+  TBD: the actual update logic here should go into the Skills API.
+  ###
+  $scope.addReading = (id) ->
+    Skills.addReading($scope.skill, id)
+
+  $scope.removeReading = (id) ->
+    Skills.removeReading($scope.skill, id)
+
+  $scope.addPractice = (id) ->
+    Skills.addPractice($scope.skill, id)
+
+  $scope.removePractice = (id) ->
+    Skills.removePractice($scope.skill, id)
 )
 
 

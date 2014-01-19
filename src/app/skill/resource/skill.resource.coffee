@@ -41,9 +41,7 @@ angular.module("yawpcow.skill.resource", [
 
 
 
-
   Skills =
-
     ###
     @property A list of legitimate prerequisites.
     ###
@@ -120,6 +118,30 @@ angular.module("yawpcow.skill.resource", [
       skill = skillMap.$child(slug)
       skill.$bind(scope, name).then (unbind)->
         skill
+
+
+    ###
+    Update reading and practice lists
+    ###
+    addReading: (skill, linkId)->
+      if not skill.reading?
+        skill.reading = []
+      skill.reading.push(linkId)
+
+    removeReading: (skill, linkId)->
+      index = skill.reading.indexOf(linkId)
+      if skill.reading? and index >= 0
+        skill.reading.splice(index,1)
+
+    addPractice: (skill, linkId)->
+      if not skill.practice?
+        skill.practice = []
+      skill.practice.push(linkId)
+
+    removePractice: (skill, linkId)->
+      index = skill.practice.indexOf(linkId)
+      if skill.practice? and index >= 0
+        skill.practice.splice(index,1)
 
 
     ###
