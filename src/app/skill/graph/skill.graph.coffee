@@ -17,11 +17,19 @@ angular.module("yawpcow.skill.graph", [
   Renders a graph (http://cpettitt.github.io/project/graphlib) using
   dagre-d3.
 
-  Adds class "selected" to selected edges and nodes.
-  Adds class "selected-prerequisite" to the prerequisite nodes (and the
-    corresponding edges) of the selected node.
-  Adds class "selected-sequel" to the sequel nodes (and the corresponding
-    edges) of the selected node.
+  Tags:
+    If tag-prefix attribute it present, then adds a CSS class for each item
+    in a node's `tags` property (expects an array), prefixed by the value
+    of tag-prefix, + '-'.  E.G.: tag-prefix="tag" and a node with tag "router"
+    would result in CSS class "tag-router" on the rect element for that node.
+
+  Click & Selection:
+    Toggles property "selected" on graph and node objects when they're clicked.
+    Adds class "selected" to selected edges and nodes.
+    Adds class "selected-prerequisite" to the prerequisite nodes (and the
+      corresponding edges) of the selected node.
+    Adds class "selected-sequel" to the sequel nodes (and the corresponding
+      edges) of the selected node.
 
   Attributes:
     graph: the graph object
@@ -47,6 +55,7 @@ angular.module("yawpcow.skill.graph", [
     redraw: "=" # This directive's link function will set
     onNodeClick: "="
     onEdgeClick: "="
+    tagPrefix: "@"
 
   link: (scope, element, attr)->
 
@@ -103,6 +112,16 @@ angular.module("yawpcow.skill.graph", [
       #     .attr("transform", "translate(" + ev.translate + ") scale(" + ev.scale + ")")
       # )
 
+
+      if scope.tagPrefix?
+
+        svg.selectAll(".node rect").each (d,i)->
+          n = graph.node(d)
+          return if not n.tags?
+          for tag in n.tags
+            d3.select(this).classed(scope.tagPrefix + "-" + tag, true)
+
+
       styleSelected(svg)
       svg.selectAll(".edgePath path").on("click", (d,i)->scope.$apply ()->
         edge = graph.edge(d)
@@ -133,7 +152,7 @@ angular.module("yawpcow.skill.graph", [
       draw()
 
 
-).controller("SkillGraphCtrl", SkillGraphController = ($scope, $state, skillSet) ->
+).controller("SkillGraphCtrl", SkillGraphController = ($scope, $state, skillSet, Slug) ->
 
 
   createEdge = (prereq, skill) ->
@@ -152,6 +171,7 @@ angular.module("yawpcow.skill.graph", [
         <div>#{skill.title}</div>
         """
         selected: false
+        tags: skill.tags
       )
 
     $scope.graph.eachNode (slug)->

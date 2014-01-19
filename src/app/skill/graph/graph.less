@@ -29,6 +29,7 @@
         cursor: pointer;
       }
       font-size: 8px;
+      max-width: 80px;
       @media (min-width: @screen-sm-min) {
         font-size: 14px;
       }
@@ -46,18 +47,33 @@
     }
   }
 
+  .tag-HTML {
+    fill: #F80;
+    fill-opacity: .20;
+    stroke: #F80;
+  }
+  .tag-CSS {
+    fill: #0AF;
+    fill-opacity: .20;
+    stroke: #0AF;
+  }
+
 
   .selected * {
-    stroke: #00f;
     stroke-opacity: 1;
+    fill-opacity: .75;
   }
 
   .selected-prerequisite * {
     stroke: #088;
+    stroke-opacity: 1;
+    fill-opacity: .75;
   }
 
   .selected-sequel * {
     stroke: #808;
+    stroke-opacity: 1;
+    fill-opacity: .75;
   }
 
 }
