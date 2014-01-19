@@ -34,8 +34,8 @@ angular.module("yawpcow.skill.resource", [
     @returns {Object} a promise that yields the skillList (a slug->skill object map)
     ###
     list: (scope, name) ->
-      listPromise = angularFire(baseRef, scope, name
-      ).then (disassociate)->
+      update = ()->
+        $log.debug "Updating skill list"
         skillList = scope[name]
 
         # These are linear in the # of skills, which is fine as long as we
@@ -66,7 +66,10 @@ angular.module("yawpcow.skill.resource", [
 
         skillList
 
-      , (error)->error
+      listPromise = angularFire(baseRef, scope, name).then (disassociate)->
+        scope.$watch name, (newValue,oldValue) ->
+          if newValue?
+            update()
 
 
     ###
@@ -118,12 +121,11 @@ angular.module("yawpcow.skill.resource", [
     @eturns {Object} the new slug.
     ###
     rename: (slug, newTitle) ->
-      newSlug = Slug.slugify(newTitle)
       skill = skillList[slug]
+      if not skill? then throw {message: "Could not find #{slug}.", list: skillList}
+
+      newSlug = Slug.slugify(newTitle)
       skillList[newSlug] = skill
-      console.log "Rename"
-      console.log slug
-      console.log skillList
       skill.title = newTitle
       delete skillList[slug]
 
