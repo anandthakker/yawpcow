@@ -22,7 +22,7 @@ angular.module("yawpcow.login", [
       main:
         controller: ($scope, $state, loginService) ->
           loginService.logout()
-          $state.go("login")
+          $state.go("login", {}, {location: "replace"})
         template: ""
 
 ).factory("loginService",
