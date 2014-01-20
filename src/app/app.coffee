@@ -8,6 +8,8 @@ angular.module("yawpcow", [
   "ui.router"
   "ui.route"
   "waitForAuth"
+  "notifications"
+  "ui.bootstrap.alert"
   "ui.bootstrap.collapse"
   "ui.bootstrap.dropdownToggle"
   "yawpcow.keyCommands"
@@ -19,18 +21,22 @@ angular.module("yawpcow", [
 ).value('skillResourceUrl', 'https://yawpcow.firebaseio.com/skills/v1'
 ).value('linksResourceUrl', 'https://yawpcow.firebaseio.com/links/v1'
 ).value('firebaseUrl', 'https://yawpcow.firebaseio.com'
-).controller "AppCtrl", AppCtrl = ($scope, $location, keyCommands, $log) ->
+).factory('$exceptionHandler', (notificationService, $log)->
+  (exception)->
+    cause = exception.cause
+    notificationService.add
+      message: exception.message ? "Error"
+      details: exception.cause
+      exception: exception
+    , "danger"
+
+    $log.error exception
+
+).controller "AppCtrl", AppCtrl = ($scope, $location, keyCommands, notificationService, $log) ->
   
   $scope.keyCommandGlossary = keyCommands.glossary
 
-  logEvent = (eventName) ->
-    $scope.$on eventName, (event, param)->
-      $log.debug eventName
-      $log.debug event
-      $log.debug param
-  _.each [
-  ],logEvent
+  $scope.notifications = notificationService.list()
 
   $scope.$on "$stateChangeSuccess", (event, toState, toParams, fromState, fromParams) ->
-    if toState?.data?.pageTitle?
-      $scope.pageTitle = toState.data.pageTitle + " | yawpcow"
+    $scope.pageTitle = (toState.data?.pageTitle ? "") + " | yawpcow"

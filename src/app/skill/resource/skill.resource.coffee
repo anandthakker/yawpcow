@@ -160,6 +160,7 @@ angular.module("yawpcow.skill.resource", [
 
     ###
     Save a skill remotely.
+    @returns {Object} A promise that is resolved once data is saved to server.
     ###
     save: (slug) ->
       skillMap.$save(slug)
@@ -189,7 +190,7 @@ angular.module("yawpcow.skill.resource", [
     @param {String} slug The (current) slug for the skill we want to rename.
     @param {String} newTitle
 
-    @eturns {Object} the new slug.
+    @eturns {Object} A promise that resolves to the new slug.
     ###
     rename: (slug, newTitle) ->
       skill = skillMap[slug]

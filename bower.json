@@ -7,21 +7,19 @@
   "dependencies": {
     "angular": "~1.2",
     "bootstrap": "3.x",
-    "angular-ui-bootstrap": "#bootstrap3",
     "angular-ui-router": "~0.2.0",
     "angular-ui-utils": "~0.0.3",
     "angularfire": "~0.6.0",
     "angular-slugify": "~1.0.0",
     "angular-sanitize": "~1.2.3",
     "textAngular": "~1.1.1",
-    "angular-tags": "~0.2.10",
     "underscore": "~1.5.2",
     "select2": "~3.4.5",
-    "ui-select2": "https://github.com/Zmetser/ui-select2.git#~0.0.4",
     "mousetrap": "~1.4.6",
     "d3": "~3.3.11",
     "dagre-d3": "https://github.com/cpettitt/dagre-d3.git#~0.1.2",
-    "graphlib": "http://cpettitt.github.io/project/graphlib/latest/graphlib.min.js"
+    "graphlib": "http://cpettitt.github.io/project/graphlib/latest/graphlib.min.js",
+    "angular-bootstrap": "~0.10.0"
   },
   "resolutions": {
     "angular": "1.2.3"

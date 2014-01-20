@@ -58,7 +58,7 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li ng-show-auth="logout" ui-route="/login" ng-class="{active:$uiRoute}">
+            <li ng-show-auth="logout,error" ui-route="/login" ng-class="{active:$uiRoute}">
               <a href="#/login">
                 Login
               </a>
@@ -73,6 +73,22 @@
         </div><!-- /.navbar-collapse -->
       </nav>
     </header>
+
+    <aside class="messages">
+      <alert ng-repeat="note in notifications" type="note.type" close="note.$remove()">
+        {{note.message}}
+        <button class="btn btn-xs btn-link"
+          ng-show="note.details"
+          ng-init="note.expand = false"
+          ng-click="note.expand = !note.expand">
+          {{note.expand ? "Hide" : "Show"}} Details
+        </button>
+        <div ng-show="note.expand">
+          {{note.details}}
+        </div>
+      </alert>
+    </aside>
+
 
     <!-- main view -->
     <div class="container" ui-view="main"></div>

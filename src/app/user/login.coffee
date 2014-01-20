@@ -27,6 +27,12 @@ angular.module("yawpcow.login", [
 
 ).factory("loginService",
   ($rootScope, $firebaseSimpleLogin, firebaseUrl, profileCreator, $timeout) ->
+
+    $rootScope.$on "$firebaseSimpleLogin:error", (event, error)->
+      throw
+        message: "Login "+error
+        cause: error
+
     assertAuth = ->
       throw new Error("Must call loginService.init() before using its methods")  if auth is null
     auth = null
@@ -124,7 +130,7 @@ angular.module("yawpcow.login", [
       loginService.login $scope.email, $scope.pass, (err, user) ->
         $scope.err = (if err then err + "" else null)
         cb and cb(user)  unless err
-        $state.go "home"
+        $state.go if err then "login" else "home"
   
   $scope.createAccount = ->
     $scope.err = null
