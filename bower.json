@@ -20,7 +20,8 @@
     "ui-select2": "https://github.com/Zmetser/ui-select2.git#~0.0.4",
     "mousetrap": "~1.4.6",
     "d3": "~3.3.11",
-    "dagre-d3": "https://github.com/cpettitt/dagre-d3.git#~0.1.2"
+    "dagre-d3": "https://github.com/cpettitt/dagre-d3.git#~0.1.2",
+    "graphlib": "http://cpettitt.github.io/project/graphlib/latest/graphlib.min.js"
   },
   "resolutions": {
     "angular": "1.2.3"

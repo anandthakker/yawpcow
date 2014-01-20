@@ -6,14 +6,27 @@ angular.module("yawpcow.skill.resource", [
 ).config(config = () ->
 ).factory('Skills', ($log, skillResourceUrl, $firebase, Slug, $q, $rootScope) ->
 
+  baseRef = new Firebase(skillResourceUrl)
+
+  skillMap = $firebase(baseRef)
   listDeferred = $q.defer()
   listPromise = listDeferred.promise
 
-  baseRef = new Firebase(skillResourceUrl)
   prereqs = []
   tags = []
+  graph = new dagreD3.Digraph()
 
-  skillMap = $firebase(baseRef)
+  buildGraph = ()->
+    console.log dagreD3
+    list = skillMap.$getIndex()
+    for slug in list
+      graph.addNode(slug)
+
+    graph.eachNode (slug)->
+      return if not skillMap[slug]?.prereqs?
+      for prereq in skillMap[slug].prereqs
+        graph.addEdge(null, prereq, slug)
+
 
   updatePrereqs = () ->
     prereqs.length = 0
@@ -30,6 +43,7 @@ angular.module("yawpcow.skill.resource", [
 
   skillMap.$on "loaded", ()->
     $log.debug "Skill list loaded"
+    buildGraph()
     updatePrereqs()
     updateTags()
     listDeferred.resolve()
@@ -60,7 +74,7 @@ angular.module("yawpcow.skill.resource", [
     list: () ->
       deferred = $q.defer()
       listPromise = listPromise.then ()->
-        deferred.resolve(skillMap.$getIndex())
+        deferred.resolve(graphlib.alg.topsort(graph))
       deferred.promise
 
     ###
