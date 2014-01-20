@@ -194,7 +194,7 @@ angular.module("yawpcow.skill.resource", [
     ###
     rename: (slug, newTitle) ->
       skill = skillMap[slug]
-      if not skill? then throw {message: "Could not find #{slug}.", list: skillMap}
+      if not skill? then throw new Error("Could not find #{slug}.")
 
       newSlug = Slug.slugify(newTitle)
       skillMap[newSlug] = skill

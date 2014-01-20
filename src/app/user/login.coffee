@@ -29,9 +29,7 @@ angular.module("yawpcow.login", [
   ($rootScope, $firebaseSimpleLogin, firebaseUrl, profileCreator, $timeout) ->
 
     $rootScope.$on "$firebaseSimpleLogin:error", (event, error)->
-      throw
-        message: "Login "+error
-        cause: error
+      throw new Error(error)
 
     assertAuth = ->
       throw new Error("Must call loginService.init() before using its methods")  if auth is null
