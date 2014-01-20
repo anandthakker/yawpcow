@@ -167,13 +167,16 @@ angular.module("yawpcow.skill.graph", [
     Skills.list().then (list)->
       $scope.graph = new dagreD3.Digraph()
       for slug in list
-        $scope.graph.addNode(slug,
-          label: """
-          <div>#{Skills.get(slug).title}</div>
-          """
-          selected: false
-          tags: Skills.get(slug).tags
-        )
+        tags = Skills.get(slug).tags ? []
+        
+        unless tags.indexOf("hidden") >= 0
+          $scope.graph.addNode(slug,
+            label: """
+            <div>#{Skills.get(slug).title}</div>
+            """
+            selected: false
+            tags: Skills.get(slug).tags
+          )
 
       $scope.graph.eachNode (slug)->
         return if not Skills.get(slug)?.prereqs?

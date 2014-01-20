@@ -17,7 +17,8 @@ angular.module("yawpcow.skill.list", [
 ).controller("SkillListCtrl",
 SkillListController = ($scope, Skills, Links) ->
   Skills.list().then (list) ->
-    $scope.slugs = list
+    $scope.slugs = list.filter (slug)->
+      (Skills.get(slug).tags ? []).indexOf("hidden") < 0
     
   $scope.get = Skills.get
   $scope.selected = {}

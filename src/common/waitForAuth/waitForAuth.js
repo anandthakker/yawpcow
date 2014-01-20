@@ -47,6 +47,7 @@ angular.module('waitForAuth', [])
  */
    .directive('ngShowAuth', function($rootScope) {
       var loginState;
+      var loginRole;
       $rootScope.$on("$firebaseSimpleLogin:login",  function() { loginState = 'login' });
       $rootScope.$on("$firebaseSimpleLogin:logout", function() { loginState = 'logout' });
       $rootScope.$on("$firebaseSimpleLogin:error",  function() { loginState = 'error' });
@@ -77,7 +78,6 @@ angular.module('waitForAuth', [])
       return {
          restrict: 'A',
          compile: function(el, attr) {
-            loginRole = null;
             assertValidState(attr.ngShowAuth);
             var expState = (attr.ngShowAuth||'').split(',');
             function fn(newState) {
