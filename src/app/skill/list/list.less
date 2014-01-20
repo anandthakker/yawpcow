@@ -1,22 +1,25 @@
-#skill-list {
+.skill-list {
+  .skill {
+    .make-row();
+    h1 {
+      .make-sm-column(12);
+    }
+    .description {
+      .make-sm-column(12);
+    }
+    .reading {
+      .make-sm-column(6);
+    }
+    .practice {
+      .make-sm-column(6);
+    }
+  }
 
   .btn {
   	padding: 0px;
   }
-
   .btn-link {
     color: black;
   }
 
-}
-
-.skills {
-  clear: both;
-
-  li {
-    margin-bottom: 5px;
-    &>*{
-      display: inline-block;
-    }
-  }
 }
