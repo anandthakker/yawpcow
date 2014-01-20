@@ -1,4 +1,4 @@
-describe "AppCtrl", ->
+xdescribe "AppCtrl", ->
   describe "isCurrentUrl", ->
     AppCtrl = undefined
     $location = undefined
@@ -15,5 +15,3 @@ describe "AppCtrl", ->
     it "should at least load!", inject(->
       expect(AppCtrl).toBeTruthy()
     )
-
-

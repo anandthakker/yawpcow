@@ -44,7 +44,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" collapse="navbarCollapsed" id="main-navbar-content">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav navbar-left">
             <li ui-route="/home" ng-class="{active:$uiRoute}">
               <a href="#/home">
                 <i class="fa fa-home"></i>
@@ -57,6 +57,19 @@
               </a>
             </li>
           </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li ng-show-auth="logout" ui-route="/login" ng-class="{active:$uiRoute}">
+              <a href="#/login">
+                Login
+              </a>
+            </li>
+            <li ng-show-auth="login">
+              <a href="#/logout">
+                Logout {{auth.user.email | firstPartOfEmail}}
+              </a>
+            </li>
+          </ul>
+
         </div><!-- /.navbar-collapse -->
       </nav>
     </header>

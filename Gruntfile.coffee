@@ -408,6 +408,7 @@ module.exports = (grunt) ->
         sub: true
         boss: true
         eqnull: true
+        asi: true
 
       globals: {}
 

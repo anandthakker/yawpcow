@@ -72,6 +72,7 @@ module.exports =
       "vendor/angular-ui-router/release/angular-ui-router.js"
       "vendor/angular-ui-utils/modules/route/route.js"
       "vendor/firebase/firebase.js"
+      "vendor/firebase-simple-login/firebase-simple-login.js"
       "vendor/angularfire/angularfire.min.js"
       "vendor/angular-slugify/angular-slugify.js"
       "vendor/angular-sanitize/angular-sanitize.min.js"
