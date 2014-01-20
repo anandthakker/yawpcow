@@ -1,7 +1,8 @@
 <section class="skill" ng-class="getTagClasses(slug)">
   <h1 class="tagged"><a ng-href="#/skill/{{slug}}/view">{{get(slug).title}}</a></h2>
   <section  class="description" ng-bind-html="get(slug).content"/>
-  <section class="reading">
+  <section class="reading"
+    ng-show="get(slug).reading.length > 0">
     <h2>Reading</h3>
     <ul class="list-unstyled">
       <li ng-repeat="l in get(slug).reading">
@@ -9,7 +10,8 @@
       </li>
     </ul>
   </section>
-  <section class="practice">
+  <section class="practice"
+    ng-show="get(slug).practice.length > 0">
   <h2>Practice</h3>
   <ul class="list-unstyled">
     <li ng-repeat="l in get(slug).practice">
