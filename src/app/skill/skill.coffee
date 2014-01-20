@@ -40,7 +40,14 @@ angular.module("yawpcow.skill.main", [
     url: "/:skillTitle/view"
     controller: ($scope, $stateParams)->
       $scope.slug = $stateParams.skillTitle
-    template: "<skill slug=\"slug\">"
+    template: """
+    <a ng-href="#/skill/{{slug}}/edit"
+      ng-show-auth="login" role="admin"
+      yc-key="e">
+      Edit
+    </a>
+    <skill slug="slug">
+    """
     data:
       pageTitle: "Skill"
 
