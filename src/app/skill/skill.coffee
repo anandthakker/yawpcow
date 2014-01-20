@@ -17,7 +17,7 @@ angular.module("yawpcow.skill.main", [
   "ui.router"
   "slugifier"
   "yawpcow.skill.resource"
-  "yawpcow.links"
+  "yawpcow.links.inputs"
   "yawpcow.links.resource"
   "yawpcow.skill.taglist"
   "ngSanitize"

@@ -18,11 +18,13 @@
 <article>
   <section ng-bind-html="skill.content">
   </section>
+  <h2>Reading</h2>
   <ul>
     <li ng-repeat="l in skill.reading">
       <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>
     </li>
   </ul>
+  <h2>Practice</h2>
   <ul>
     <li ng-repeat="l in skill.practice">
       <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>

@@ -1,4 +1,4 @@
-angular.module("yawpcow.links", [
+angular.module("yawpcow.links.inputs", [
   "yawpcow.links.resource"
 ]).directive("ycLinkInput", (Links)->
   restrict: "E"
@@ -49,6 +49,4 @@ angular.module("yawpcow.links", [
         scope.add()
 
     scope.linkObject = Links.new()
-
-
 )
