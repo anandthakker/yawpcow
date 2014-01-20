@@ -1,46 +1,6 @@
-
-
-<section id="skill-list">
-  <section ng-repeat="slug in slugs">
-    <h1>{{get(slug).title}}</h1>
-    <section class="reading">
-      <h2>Reading</h2>
-      <ul class="list-unstyled">
-        <li ng-repeat="l in get(slug).reading">
-          <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>
-        </li>
-      </ul>
-    </section>
-    <section class="practice">
-    <h2>Practice</h2>
-    <ul class="list-unstyled">
-      <li ng-repeat="l in get(slug).practice">
-        <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>
-      </li>
-    </ul>
-    </section>
-  </section>
-
-<!-- 	<ul class="skills list-unstyled">
-		<li ng-repeat="slug in slugs">
-      <input type="checkbox" ng-model="selected[slug]" tabindex="1" autofocus>
-      <div>
-        <a ng-href="#/skill/{{slug}}/view">{{get(slug).title}}</a>
-        <taglist tags="get(slug).tags"/>
-      </div>
-      <div class="controls">
-        <a ng-href="#/skill/{{slug}}/edit" role="button" class="btn btn-link"><i class="fa fa-edit"></i></a>
-        <button type="button" class="btn btn-link" ng-click="delete(slug)"><i class="fa fa-times"></i></button>
-      </div>
-    </li>
-	</ul> -->
-
-<!--   <button type="button" class="btn btn-link"
-    ng-click="delete()"
-    yc-key="['d']:Delete Selected">
-    <i class="fa fa-times"/>
-    Delete Selected
-  </button>
-	<add-skill yc-key="['n','+']:New Skill"><i class="fa fa-plus"/> Add Skill</add-skill>
- -->
-</section>
+<article class="skill-list">
+  <h1>Web Dev Skills and Concepts</h1>
+  <div ng-repeat="slug in slugs">
+    <skill slug="slug">
+  </div>
+</article>

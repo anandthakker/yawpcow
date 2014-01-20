@@ -38,17 +38,38 @@ angular.module("yawpcow.skill.main", [
 
   $stateProvider.state "skill.view",
     url: "/:skillTitle/view"
-    controller: "SkillViewEditCtrl"
-    templateUrl: "skill/view/view.tpl.html"
+    controller: ($scope, $stateParams)->
+      $scope.slug = $stateParams.skillTitle
+    template: "<skill slug=\"slug\">"
     data:
       pageTitle: "Skill"
 
   $stateProvider.state "skill.edit",
     url: "/:skillTitle/edit"
-    controller: "SkillViewEditCtrl"
+    controller: "SkillEditCtrl"
     templateUrl: "skill/edit/edit.tpl.html"
     data:
       pageTitle: "Edit Skill"
+
+
+
+).directive("skill", (Skills, Links)->
+  restrict: 'E'
+  templateUrl: "skill/view/view.tpl.html"
+  replace: true
+  scope:
+    slug: "="
+  link: (scope, element, attr)->
+    console.log scope.slug
+    scope.getLink = (id) ->
+      Links.get(id)
+
+    scope.get = (slug) -> Skills.get(slug)
+
+    scope.getTagClasses = (slug)->
+      tags = Skills.get(slug)?.tags ? []
+      tags.map (tag)->"tag-"+tag
+
 
 ).directive("addSkill", ($log, $timeout, Skills, $state) ->
   restrict: 'E'
@@ -83,15 +104,23 @@ angular.module("yawpcow.skill.main", [
     scope.add = startAdd
     scope.adding = false
 
+
+
 ).controller("SkillCtrl",
-SkillController = ($log, $scope, $state, $stateParams, Skills) ->
+SkillController = ($log, $scope, $state, $stateParams, Skills, Links) ->
   $log.debug "SkillController"
 
-  $scope.prereqList = Skills.prereqList
-  $scope.tagList = Skills.tagList
+  Skills.list().then (list) ->
+    $scope.prereqList = Skills.prereqList
+    $scope.tagList = Skills.tagList
+    $scope.slugs = list.filter (slug)->
+      (Skills.get(slug).tags ? []).indexOf("hidden") < 0
+    
+  $scope.get = Skills.get
 
-).controller("SkillViewEditCtrl",
-SkillViewEditController = ($log, $scope, $state, $stateParams, Skills, Links, $window) ->
+
+).controller("SkillEditCtrl",
+SkillEditController = ($log, $scope, $state, $stateParams, Skills, $window) ->
   $log.debug "SkillViewEditController"
   $scope.slug = $stateParams.skillTitle
   Skills.bind($scope, 'skill', $scope.slug)
@@ -102,10 +131,6 @@ SkillViewEditController = ($log, $scope, $state, $stateParams, Skills, Links, $w
     Skills.rename($scope.slug, newTitle).then (newSlug) ->
       $state.go("skill.edit", {skillTitle: newSlug})
     , (error) -> error
-
-  $scope.getLink = (id) ->
-    Links.get(id)
-
 
   ###
   TBD: the actual update logic here should go into the Skills API.
