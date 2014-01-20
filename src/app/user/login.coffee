@@ -26,18 +26,27 @@ angular.module("yawpcow.login", [
         template: ""
 
 ).factory("loginService",
-  ($rootScope, $firebaseSimpleLogin, firebaseUrl, profileCreator, $timeout) ->
+  ($rootScope, $firebaseSimpleLogin, $firebase, firebaseUrl, profileCreator, $timeout, $q) ->
 
     $rootScope.$on "$firebaseSimpleLogin:error", (event, error)->
       throw new Error(error)
 
+    $rootScope.$on "$firebaseSimpleLogin:login", (event, user)->
+      role = $firebase(baseRef.child("roles").child(user.uid))
+      role.$on "loaded", ()->
+        $rootScope.$broadcast("loginService:role", role.$value)
+
+
     assertAuth = ->
       throw new Error("Must call loginService.init() before using its methods")  if auth is null
+
+    baseRef = null
     auth = null
 
     loginService =
       init: ->
-        $rootScope.auth = auth = $firebaseSimpleLogin(new Firebase(firebaseUrl))
+        baseRef = new Firebase(firebaseUrl)
+        $rootScope.auth = auth = $firebaseSimpleLogin(baseRef)
 
       login: (email, pass, callback) ->
         assertAuth()
@@ -95,7 +104,7 @@ angular.module("yawpcow.login", [
 ).factory("profileCreator", ($firebase, firebaseUrl, $timeout, $filter) ->
   (id, email, callback) ->
     
-    new Firebase(firebaseUrl + "/users/" + id).set
+    (new Firebase(firebaseUrl)).child("users").child(id).set
       email: email
       name: $filter("firstPartOfEmail")(email)
     , (err) ->

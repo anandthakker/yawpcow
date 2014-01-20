@@ -50,6 +50,7 @@ angular.module('waitForAuth', [])
       $rootScope.$on("$firebaseSimpleLogin:login",  function() { loginState = 'login' });
       $rootScope.$on("$firebaseSimpleLogin:logout", function() { loginState = 'logout' });
       $rootScope.$on("$firebaseSimpleLogin:error",  function() { loginState = 'error' });
+
       function inList(needle, list) {
          var res = false;
          angular.forEach(list, function(x) {
@@ -76,17 +77,27 @@ angular.module('waitForAuth', [])
       return {
          restrict: 'A',
          compile: function(el, attr) {
+            loginRole = null;
             assertValidState(attr.ngShowAuth);
             var expState = (attr.ngShowAuth||'').split(',');
             function fn(newState) {
                loginState = newState;
                var hide = !inList(newState, expState);
+               if('role' in attr)
+               {
+                  hide = (loginRole !== attr.role)
+               }
                el.toggleClass('hide', hide );
             }
             fn(loginState);
             $rootScope.$on("$firebaseSimpleLogin:login",  function() { fn('login') });
             $rootScope.$on("$firebaseSimpleLogin:logout", function() { fn('logout') });
             $rootScope.$on("$firebaseSimpleLogin:error",  function() { fn('error') });
+            $rootScope.$on("loginService:role", function(event, role) {
+               console.log(role);
+               loginRole = role;
+               fn(loginState);
+            });
          }
       }
    });

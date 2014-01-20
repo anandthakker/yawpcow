@@ -1,6 +1,6 @@
 
 <section id="skill-graph">
-<div class="admin">
+<div class="admin" ng-show-auth="login" role="admin">
   <button class="btn btn-link" 
     ng-click="deletingNode = !deletingNode">
     {{ deletingNode ? "Stop" : "Start"}} Deleting Nodes

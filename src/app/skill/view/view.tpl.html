@@ -1,6 +1,11 @@
 <section id="skill-view">
 <header>
-  <a ng-href="#/skill/{{slug}}/edit" yc-key="e" class="btn btn-link"><i class="fa fa-edit"/> Edit</a>
+  <a ng-href="#/skill/{{slug}}/edit" 
+    yc-key="e" 
+    class="btn btn-link"
+    ng-show-auth="login" role="admin">
+    <i class="fa fa-edit"/> Edit
+  </a>
   <h1>{{skill.title}}</h1>
 </header>
 <aside>
