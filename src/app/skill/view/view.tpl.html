@@ -1,22 +1,44 @@
 <section class="skill" ng-class="getTagClasses(slug)">
-  <h1 class="tagged"><a ng-href="#/skill/{{slug}}/view">{{get(slug).title}}</a></h2>
+
+  <h1 class="tagged">
+    <a ng-href="#/skill/{{slug}}/view">
+      {{get(slug).title}}
+    </a>
+  </h2>
+
+  <aside class="prereqs"
+    ng-show="get(slug).prereqs.length > 0">
+    <h2>Prerequisites</h2>
+    <ul class="list-unstyled">
+      <li ng-repeat="prereq in get(slug).prereqs">
+        <a ng-href="#/skill/{{prereq}}/view"
+          ng-class="getTagClasses(prereq)">
+          {{get(prereq).title}}
+        </a>
+      </li>
+    </ul>
+  </aside>
+
   <section  class="description" ng-bind-html="get(slug).content"/>
+
   <section class="reading"
     ng-show="get(slug).reading.length > 0">
-    <h2>Reading</h3>
+    <h2>Reading</h2>
     <ul class="list-unstyled">
       <li ng-repeat="l in get(slug).reading">
         <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>
       </li>
     </ul>
   </section>
+
   <section class="practice"
     ng-show="get(slug).practice.length > 0">
-  <h2>Practice</h3>
-  <ul class="list-unstyled">
-    <li ng-repeat="l in get(slug).practice">
-      <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>
-    </li>
-  </ul>
+    <h2>Practice</h2>
+    <ul class="list-unstyled">
+      <li ng-repeat="l in get(slug).practice">
+        <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>
+      </li>
+    </ul>
   </section>
+
 </section>

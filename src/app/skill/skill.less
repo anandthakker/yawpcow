@@ -1,21 +1,7 @@
 
-#skill-nav {
-  .pull-right();
-  & + * {
-    clear: both;
-  }
-}
-
-.taglist {
-  display: inline;
-  ul { .list-inline; }
-  .text-muted;
-  .label {
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-}
-
+/**
+ * tag-specific styling
+ */
 .tag-CSS .tagged {
   color: @color-css;
 }
@@ -25,7 +11,15 @@
 .tag-making .tagged {
   color: @color-making;
 }
-
+a.tag-CSS {
+  color: @color-css;
+}
+a.tag-HTML {
+  color: @color-html;
+}
+a.tag-making {
+  color: @color-making;
+}
 
 .skill {
   h1 {
