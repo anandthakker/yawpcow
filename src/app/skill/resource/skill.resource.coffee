@@ -74,7 +74,24 @@ angular.module("yawpcow.skill.resource", [
     list: () ->
       deferred = $q.defer()
       listPromise = listPromise.then ()->
-        deferred.resolve(graphlib.alg.topsort(graph))
+
+        list = []
+
+        addRank = (nodes)->
+          return if _.every(nodes, (node)->graph.outEdges(node).length == 0)
+
+          nodes = _.sortBy(nodes, (node)->-graph.outEdges(node).length)
+          for node in nodes
+            if list.indexOf(node) < 0
+              list.push(node)
+
+          nextRank = _.uniq(_.flatten(nodes.map((node)->graph.successors(node)),true))
+
+          addRank(nextRank)
+
+        addRank(graph.sources())
+
+        deferred.resolve(list)
       deferred.promise
 
     ###
