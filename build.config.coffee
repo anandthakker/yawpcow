@@ -65,11 +65,11 @@ module.exports =
   ###
   vendor_files:
     js: [
-      "vendor/jquery/jquery.js"
-      "vendor/angular/angular.js"
-      "vendor/angular-bootstrap/ui-bootstrap-tpls.js"
+      "vendor/jquery/jquery.min.js"
+      "vendor/angular/angular.min.js"
+      "vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"
       "vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js"
-      "vendor/angular-ui-router/release/angular-ui-router.js"
+      "vendor/angular-ui-router/release/angular-ui-router.min.js"
       "vendor/angular-ui-utils/modules/route/route.js"
       "vendor/firebase/firebase.js"
       "vendor/firebase-simple-login/firebase-simple-login.js"
@@ -77,12 +77,12 @@ module.exports =
       "vendor/angular-slugify/angular-slugify.js"
       "vendor/angular-sanitize/angular-sanitize.min.js"
       "vendor/textAngular/textAngular.min.js"
-      "vendor/select2/select2.js"
-      "vendor/underscore/underscore.js"
-      "vendor/mousetrap/mousetrap.js"
-      "vendor/d3/d3.js"
-      "vendor/graphlib/index.js"
-      "vendor/dagre-d3/build/dagre-d3.js"
+      "vendor/select2/select2.min.js"
+      "vendor/underscore/underscore-min.js"
+      "vendor/mousetrap/mousetrap.min.js"
+      "vendor/d3/d3.min.js"
+      "vendor/graphlib.min/index.js"
+      "vendor/dagre-d3/build/dagre-d3.min.js"
     ]
     css: [
       "vendor/select2/select2.css"

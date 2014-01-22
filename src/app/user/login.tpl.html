@@ -1,22 +1,34 @@
-<h2>Login Page</h2>
+<h2>Login / Register</h2>
 
-<form>
-    <label>
-        <span>email</span>
-        <input type="text" autofocus ng-model="email" />
-    </label>
-    <label>
-        <span>password</span>
-        <input type="password" ng-model="pass" />
-    </label>
-    <label ng-cloak ng-show="createMode">
-        <span>confirm pass</span>
-        <input type="password" ng-model="confirm" />
-    </label>
-    <button ng-click="login()" ng-hide="createMode">Log In</button>
-    <button ng-click="createMode = true" ng-hide="createMode">Register</button>
-    <button ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>
-    <button ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
+<form role="form">
+    <div class="form-group">    
+        <label for="emailInput">
+            email
+        </label>
+        <input id="emailInput" type="text" class="form-control" 
+            autofocus ng-model="email" />
+    </div>
 
-    <p ng-show="err" class="error">{{err}}</p>
+<div class="form-group">
+    <label for="passwordInput">
+        password
+    </label>
+    <input id="passwordInput" type="password" class="form-control" 
+        ng-model="pass" />
+</div>
+
+<div class="form-group" ng-cloak ng-show="createMode">
+    <label for="confirmPasswordInput">
+        confirm pass
+    </label>
+    <input id="confirmPasswordInput" type="password" class="form-control" 
+        ng-model="confirm" />
+</div>
+
+<button class="btn btn-default" ng-click="login()" ng-hide="createMode">Log In</button>
+<button class="btn btn-default" ng-click="createMode = true" ng-hide="createMode">Register</button>
+<button class="btn btn-default" ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>
+<button class="btn btn-default" ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
+
+<p ng-show="err" class="error">{{err}}</p>
 </form>

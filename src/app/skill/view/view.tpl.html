@@ -4,12 +4,12 @@
     <a ng-href="#/skill/{{slug}}/view">
       {{get(slug).title}}
     </a>
-  </h2>
+  </h1>
 
   <aside class="prereqs"
     ng-show="get(slug).prereqs.length > 0">
-    <h2>Prerequisites</h2>
-    <ul class="list-unstyled">
+    <h2>Prereqs:</h2>
+    <ul class="list-unstyled list-inline">
       <li ng-repeat="prereq in get(slug).prereqs">
         <a ng-href="#/skill/{{prereq}}/view"
           ng-class="getTagClasses(prereq)">

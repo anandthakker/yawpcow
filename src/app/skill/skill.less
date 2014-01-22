@@ -11,24 +11,57 @@
 .tag-making .tagged {
   color: @color-making;
 }
-a.tag-CSS {
-  color: @color-css;
+.tag-javascript .tagged {
+  color: @color-javascript;
 }
-a.tag-HTML {
-  color: @color-html;
-}
-a.tag-making {
-  color: @color-making;
+a,strong {
+  &.tag-CSS {
+    color: @color-css;
+  }
+  &.tag-HTML {
+    color: @color-html;
+  }
+  &.tag-making {
+    color: @color-making;
+  }
+  &.tag-javascript {
+    color: @color-javascript;
+  }
 }
 
+
 .skill {
+  @media (min-width: @screen-sm-min) {
+    h1,aside.prereqs {
+      vertical-align: baseline;
+      display: inline-block;
+    }
+  }
   h1 {
-    color: black;
+    color: #666;
     text-transform: uppercase;
     font-weight: bold;
     a {
       color: inherit;
     }
+  }
+  aside.prereqs{
+    h2 {
+      font-size: @font-size-base;
+      display: inline;
+      text-transform: uppercase;
+    }
+
+    li {
+      font-family: @tags-font-family;
+      font-weight: 300;
+    }
+
+    margin-bottom: (@line-height-computed / 2);
+  }
+
+  .description {
+    clear: both;
   }
 }
 
