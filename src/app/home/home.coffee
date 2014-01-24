@@ -1,6 +1,8 @@
 
 angular.module("yawpcow.home", [
   "ui.router"
+  "ui.bootstrap.collapse"
+
 ]).config(config = ($stateProvider) ->
   $stateProvider.state "home",
     url: "/home"
