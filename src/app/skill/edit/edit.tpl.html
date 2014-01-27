@@ -40,6 +40,7 @@
       <label for="reading">Reading</label>
       <div class="form-input">
         <div ng-repeat="l in skill.reading">
+          <button class="btn btn-link btn-xs" ng-click="moveUp(skill.reading, $index)">Up</button>
           <yc-link-input link-id="l" on-remove="removeReading"/>
         </div>
         <yc-add-link-input on-added="addReading"/>
@@ -50,6 +51,7 @@
       <label for="reading">Practice</label>
       <div class="form-input">
         <div ng-repeat="l in skill.practice">
+          <button class="btn btn-link btn-xs" ng-click="moveUp(skill.practice, $index)">Up</button>
           <yc-link-input link-id="l" on-remove="removePractice"/>
         </div>
         <yc-add-link-input on-added="addPractice"/>

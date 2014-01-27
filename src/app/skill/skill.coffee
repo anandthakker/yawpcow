@@ -142,6 +142,11 @@ SkillEditController = ($log, $scope, $state, $stateParams, Skills, $window) ->
   ###
   TBD: the actual update logic here should go into the Skills API.
   ###
+  $scope.moveUp = (list, index) ->
+    temp = list[index-1]
+    list[index-1] = list[index]
+    list[index] = temp
+
   $scope.addReading = (id) ->
     Skills.addReading($scope.skill, id)
 
