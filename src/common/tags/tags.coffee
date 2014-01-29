@@ -1,5 +1,5 @@
-angular.module("yawpcow.tags", []
-).directive "ycTagSelect", ($timeout, $log) ->
+angular.module("taginput", []
+).directive "taginput", ($timeout, $log) ->
   restrict: "E"
   replace: true
   template: '<input type="text">'

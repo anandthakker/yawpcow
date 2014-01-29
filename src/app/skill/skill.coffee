@@ -22,7 +22,7 @@ angular.module("yawpcow.skill.main", [
   "yawpcow.skill.taglist"
   "ngSanitize"
   "textAngular"
-  "yawpcow.tags"
+  "taginput"
   "yawpcow.keyCommands"
 ]
 ).config(config = ($stateProvider) ->
