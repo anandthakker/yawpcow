@@ -2,13 +2,18 @@
 angular.module("yawpcow.skill.resource", [
   "slugifier"
   "firebase"
+  "firebase.connection"
 ]
 ).config(config = () ->
-).factory('Skills', ($log, skillResourceUrl, $firebase, Slug, $q, $rootScope) ->
+).factory('Skills', ($log, firebaseRef, $firebase, Slug, $q, $rootScope) ->
 
-  baseRef = new Firebase(skillResourceUrl)
+  baseRef = firebaseRef().child("skills").child("v1")
 
   skillMap = $firebase(baseRef)
+
+  $log.debug "Skills resource"
+  $log.debug baseRef
+
   listDeferred = $q.defer()
   listPromise = listDeferred.promise
 

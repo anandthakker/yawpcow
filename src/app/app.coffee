@@ -1,4 +1,5 @@
 angular.module("yawpcow", [
+  "firebase.connection"
   "templates-app"
   "templates-common"
   "yawpcow.login"
@@ -13,14 +14,21 @@ angular.module("yawpcow", [
   "ui.bootstrap.collapse"
   "ui.bootstrap.dropdownToggle"
   "yawpcow.keyCommands"
+
 ]).config(myAppConfig = ($stateProvider, $urlRouterProvider, $logProvider) ->
   $urlRouterProvider.otherwise "/home"
   $logProvider.debugEnabled true
+  console.log "App Config"
+
 ).run(run = (loginService, $rootScope)->
-  loginService.init()
-).value('skillResourceUrl', 'https://yawpcow.firebaseio.com/skills/v1'
-).value('linksResourceUrl', 'https://yawpcow.firebaseio.com/links/v1'
+
+  $rootScope.$on "firebaseInfo:connected", ()->
+    loginService.init()
+
+  console.log "App run"
+
 ).value('firebaseUrl', 'https://yawpcow.firebaseio.com'
+
 ).factory('$exceptionHandler', (notificationService, $log)->
   (exception)->
     cause = exception.cause
@@ -33,7 +41,7 @@ angular.module("yawpcow", [
     $log.error exception
 
 ).controller "AppCtrl", AppCtrl = ($scope, $location, keyCommands, notificationService, $log) ->
-  
+  $log.debug "AppCtrl"
   $scope.keyCommandGlossary = keyCommands.glossary
 
   $scope.notifications = notificationService.list()

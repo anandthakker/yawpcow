@@ -1,11 +1,14 @@
 angular.module("yawpcow.links.resource", [
   "firebase"
-]).factory('Links', ($log, linksResourceUrl, $firebase, Slug, $q, $rootScope) ->
+  "firebase.connection"
+]).factory('Links', ($log, firebaseRef, $firebase, Slug, $q, $rootScope) ->
 
   listDeferred = $q.defer()
   listPromise = listDeferred.promise
 
-  baseRef = new Firebase(linksResourceUrl)
+  # TODO: refactor database so that "v1" is parent, so that modules like this one
+  # don't need to be aware of it.
+  baseRef = firebaseRef().child("skills").child("v1")
   links = $firebase(baseRef)
 
   links.$on "loaded", ()->

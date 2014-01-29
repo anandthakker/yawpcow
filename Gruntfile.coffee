@@ -311,7 +311,10 @@ module.exports = (grunt) ->
 
       build_vendorjs:
         files: [
-          src: ["<%= vendor_files.js %>"]
+          src: [
+            "<%= vendor_files.js %>"
+            "<%= vendor_files.map %>"
+          ]
           dest: "<%= build_dir %>/"
           cwd: "."
           expand: true
@@ -420,7 +423,10 @@ module.exports = (grunt) ->
 
       src:
         files:
-          src: ["<%= app_files.coffee %>"]
+          src: [
+            "<%= app_files.coffee %>"
+            "!src/app/firebase/offline.coffee" #exclude the big json backup file
+          ]
 
       test:
         files:

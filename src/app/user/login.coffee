@@ -6,6 +6,7 @@ https://github.com/firebase/angularFire-seed/blob/master/app/js/service.login.js
 angular.module("yawpcow.login", [
   "ui.router"
   "firebase"
+  "firebase.connection"
 ]).config( ($stateProvider)->
   $stateProvider.state "login",
     url: "/login"
@@ -26,13 +27,13 @@ angular.module("yawpcow.login", [
         template: ""
 
 ).factory("loginService",
-  ($rootScope, $firebaseSimpleLogin, $firebase, firebaseUrl, profileCreator, $timeout, $q) ->
+  ($rootScope, $firebaseSimpleLogin, $firebase, firebaseRef, profileCreator, $timeout, $q) ->
 
     $rootScope.$on "$firebaseSimpleLogin:error", (event, error)->
       throw new Error(error)
 
     $rootScope.$on "$firebaseSimpleLogin:login", (event, user)->
-      role = $firebase(baseRef.child("roles").child(user.uid))
+      role = $firebase(firebaseRef().child("roles").child(user.uid))
       role.$on "loaded", ()->
         $rootScope.$broadcast("loginService:role", role.$value)
 
@@ -40,13 +41,12 @@ angular.module("yawpcow.login", [
     assertAuth = ->
       throw new Error("Must call loginService.init() before using its methods")  if auth is null
 
-    baseRef = null
+    firebaseRef = null
     auth = null
 
     loginService =
       init: ->
-        baseRef = new Firebase(firebaseUrl)
-        $rootScope.auth = auth = $firebaseSimpleLogin(baseRef)
+        $rootScope.auth = auth = $firebaseSimpleLogin(firebaseRef)
 
       login: (email, pass, callback) ->
         assertAuth()
@@ -101,10 +101,9 @@ angular.module("yawpcow.login", [
     else
       ""+email
 
-).factory("profileCreator", ($firebase, firebaseUrl, $timeout, $filter) ->
+).factory("profileCreator", ($firebase, firebaseRef, $timeout, $filter) ->
   (id, email, callback) ->
-    
-    (new Firebase(firebaseUrl)).child("users").child(id).set
+    firebaseRef().child("users").child(id).set
       email: email
       name: $filter("firstPartOfEmail")(email)
     , (err) ->
