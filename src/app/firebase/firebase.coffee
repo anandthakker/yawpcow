@@ -19,15 +19,5 @@ angular.module("firebase.connection", [
   info
 
 ).factory("firebaseRef", (firebaseInfo, firebaseRef_live, firebaseOffline)->
-
-  # not sure about this.
-  offlineRef = new Firebase("http://dummy.firebaseio.com/")
-
-  offlineRef.set(firebaseOffline)
-
-  ()->
-    if firebaseInfo.connected
-      firebaseRef_live
-    else
-      offlineRef
+  ()->firebaseRef_live
 )

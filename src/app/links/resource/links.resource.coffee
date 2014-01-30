@@ -8,7 +8,7 @@ angular.module("yawpcow.links.resource", [
 
   # TODO: refactor database so that "v1" is parent, so that modules like this one
   # don't need to be aware of it.
-  baseRef = firebaseRef().child("skills").child("v1")
+  baseRef = firebaseRef().child("links").child("v1")
   links = $firebase(baseRef)
 
   links.$on "loaded", ()->
