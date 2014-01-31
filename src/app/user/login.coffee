@@ -41,12 +41,11 @@ angular.module("yawpcow.login", [
     assertAuth = ->
       throw new Error("Must call loginService.init() before using its methods")  if auth is null
 
-    firebaseRef = null
     auth = null
 
     loginService =
       init: ->
-        $rootScope.auth = auth = $firebaseSimpleLogin(firebaseRef)
+        $rootScope.auth = auth = $firebaseSimpleLogin(firebaseRef())
 
       login: (email, pass, callback) ->
         assertAuth()

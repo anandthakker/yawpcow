@@ -5,7 +5,7 @@ angular.module("firebase.connection", [
 ).factory("firebaseInfo", ($rootScope, firebaseRef_live)->
 
   info =
-    connected = false
+    connected: false
 
   firebaseRef_live.child(".info").on "value", (snap)->
     newInfo = snap.val()

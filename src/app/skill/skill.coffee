@@ -67,7 +67,6 @@ angular.module("yawpcow.skill.main", [
   scope:
     slug: "="
   link: (scope, element, attr)->
-    console.log scope.slug
     scope.getLink = (id) ->
       Links.get(id)
 
