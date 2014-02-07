@@ -33,6 +33,8 @@ angular.module("yawpcow.skill.graph", [
 
   Attributes:
     graph: the graph object
+    [node-sep: node separation]
+    [rank-sep: rank separation]
     redraw: directive (link) will set this to a callback that redraws the graph.
     on-node-click: function to be called (with node-id as parameter) when a node is
       selected or deselected.
@@ -65,9 +67,18 @@ angular.module("yawpcow.skill.graph", [
     # Override post-render to get rid of markers.
     renderer.postRender (graph, root) ->
 
+
+    nodeSep = 5
+    rankSep = 100
+    if attr.nodeSep? then nodeSep = parseInt(attr.nodeSep, 10)
+    if attr.rankSep? then rankSep = parseInt(attr.rankSep, 10)
+
+
+
+
     layout = dagreD3.layout()
-      .nodeSep(5)
-      .rankSep(100)
+      .nodeSep(nodeSep)
+      .rankSep(rankSep)
 
     styleSelected = (svg) ->
       gr = scope.graph
