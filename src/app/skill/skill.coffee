@@ -46,7 +46,9 @@ angular.module("yawpcow.skill.main", [
       yc-key="e">
       Edit
     </a>
-    <skill slug="slug">
+    <div class="container">
+      <skill slug="slug">
+    </div>
     """
     data:
       pageTitle: "Skill"
