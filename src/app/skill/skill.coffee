@@ -72,6 +72,9 @@ angular.module("yawpcow.skill.main", [
 
     scope.get = (slug) -> Skills.get(slug)
 
+    scope.getSequels = (slug) ->
+      Skills.getSequels(slug)
+
     scope.getTagClasses = (slug)->
       tags = Skills.get(slug)?.tags ? []
       tags.map (tag)->"tag-"+tag

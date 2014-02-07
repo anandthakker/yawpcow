@@ -109,7 +109,6 @@ angular.module("yawpcow.skill.resource", [
       deferred.promise
 
 
-
     ###
     Create a new skill with the given title.
 
@@ -154,6 +153,14 @@ angular.module("yawpcow.skill.resource", [
       skill = skillMap.$child(slug)
       skill.$bind(scope, name).then (unbind)->
         skill
+
+
+    ###
+    Get the "sequels" of the given skill -- i.e., the skills for which the given
+    skill is a prerequisite.
+    ###
+    getSequels: (slug) ->
+      if(graph.hasNode(slug)) then graph.successors(slug) else null
 
 
     ###

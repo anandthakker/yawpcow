@@ -6,7 +6,7 @@
     </a>
   </h1>
 
-  <aside class="prereqs"
+  <aside class="related prereqs"
     ng-show="get(slug).prereqs.length > 0">
     <h2>Prereqs:</h2>
     <ul class="list-unstyled list-inline">
@@ -46,5 +46,17 @@
       </li>
     </ul>
   </section>
+
+  <aside class="related sequels">
+    <h2>Next steps:</h2>
+    <ul class="list-unstyled list-inline">
+      <li ng-repeat="sequel in getSequels(slug)">
+        <a ng-href="#/skill/{{sequel}}/view"
+          ng-class="getTagClasses(sequel)">
+          {{get(sequel).title}}
+        </a>
+      </li>
+    </ul>
+  </aside>
 
 </section>
