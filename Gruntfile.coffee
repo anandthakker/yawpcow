@@ -1,224 +1,6 @@
 module.exports = (grunt) ->
   
   ###
-  Load required Grunt tasks. These are installed based on the versions listed
-  in `package.json` when you do `npm install` in this directory.
-  ###
-  
-  ###
-  Load in our build configuration file.
-  ###
-  
-  ###
-  This is the configuration object Grunt uses to give each plugin its
-  instructions.
-  ###
-  
-  ###
-  We read in our `package.json` file so we can access the package name and
-  version. It's already there, so we don't repeat ourselves here.
-  ###
-  
-  ###
-  The banner is the comment that is placed at the top of our compiled
-  source files. It is first processed as a Grunt template, where the `<%=`
-  pairs are evaluated based on this very configuration object.
-  ###
-  
-  ###
-  Creates a changelog on a new version.
-  ###
-  
-  ###
-  Increments the version number, etc.
-  ###
-  
-  ###
-  The directories to delete when `grunt clean` is executed.
-  ###
-  
-  ###
-  The `copy` task just copies files from A to B. We use it here to copy
-  our project assets (images, fonts, etc.) and javascripts into
-  `build_dir`, and then to copy the assets to `compile_dir`.
-  ###
-  
-  ###
-  `grunt concat` concatenates multiple source files into a single file.
-  ###
-  
-  ###
-  The `build_css` target concatenates compiled CSS and vendor CSS
-  together.
-  ###
-  
-  ###
-  The `compile_js` target is the concatenation of our application source
-  code and all specified vendor source code into a single file.
-  ###
-  
-  ###
-  `grunt coffee` compiles the CoffeeScript sources. To work well with the
-  rest of the build, we have a separate compilation task for sources and
-  specs so they can go to different places. For example, we need the
-  sources to live with the rest of the copied JavaScript so we can include
-  it in the final build, but we don't want to include our specs there.
-  ###
-  
-  ###
-  `ng-min` annotates the sources before minifying. That is, it allows us
-  to code without the array syntax.
-  ###
-  
-  ###
-  Minify the sources!
-  ###
-  
-  ###
-  `recess` handles our LESS compilation and uglification automatically.
-  Only our `main.less` file is included in compilation; all other files
-  must be imported from this file.
-  ###
-  
-  ###
-  `jshint` defines the rules of our linter as well as which files we
-  should check. This file, all javascript sources, and all our unit tests
-  are linted based on the policies listed in `options`. But we can also
-  specify exclusionary patterns by prefixing them with an exclamation
-  point (!); this is useful when code comes from a third party but is
-  nonetheless inside `src/`.
-  ###
-  
-  ###
-  `coffeelint` does the same as `jshint`, but for CoffeeScript.
-  CoffeeScript is not the default in ngBoilerplate, so we're just using
-  the defaults here.
-  ###
-  
-  ###
-  HTML2JS is a Grunt plugin that takes all of your template files and
-  places them into JavaScript files as strings that are added to
-  AngularJS's template cache. This means that the templates too become
-  part of the initial payload as one JavaScript file. Neat!
-  ###
-  
-  ###
-  These are the templates from `src/app`.
-  ###
-  
-  ###
-  These are the templates from `src/common`.
-  ###
-  
-  ###
-  The Karma configurations.
-  ###
-  
-  ###
-  The `index` task compiles the `index.html` file as a Grunt template. CSS
-  and JS files co-exist here but they get split apart later.
-  ###
-  
-  ###
-  During development, we don't want to have wait for compilation,
-  concatenation, minification, etc. So to avoid these steps, we simply
-  add all script files directly to the `<head>` of `index.html`. The
-  `src` property contains the list of included files.
-  ###
-  
-  ###
-  When it is time to have a completely compiled application, we can
-  alter the above to include only a single JavaScript and a single CSS
-  file. Now we're back!
-  ###
-  
-  ###
-  This task compiles the karma template so that changes to its file array
-  don't have to be managed manually.
-  ###
-  
-  ###
-  And for rapid development, we have a watch set up that checks to see if
-  any of the files listed below change, and then to execute the listed
-  tasks when they do. This just saves us from having to type "grunt" into
-  the command-line every time we want to see what we're working on; we can
-  instead just leave "grunt watch" running in a background terminal. Set it
-  and forget it, as Ron Popeil used to tell us.
-  
-  But we don't need the same thing to happen for all the files.
-  ###
-  
-  ###
-  By default, we want the Live Reload to work for all tasks; this is
-  overridden in some tasks (like this file) where browser resources are
-  unaffected. It runs by default on port 35729, which your browser
-  plugin should auto-detect.
-  ###
-  
-  ###
-  When the Gruntfile changes, we just want to lint it. In fact, when
-  your Gruntfile changes, it will automatically be reloaded!
-  ###
-  
-  ###
-  When our JavaScript source files change, we want to run lint them and
-  run our unit tests.
-  ###
-  
-  ###
-  When our CoffeeScript source files change, we want to run lint them and
-  run our unit tests.
-  ###
-  
-  ###
-  When assets are changed, copy them. Note that this will *not* copy new
-  files, so this is probably not very useful.
-  ###
-  
-  ###
-  When index.html changes, we need to compile it.
-  ###
-  
-  ###
-  When our templates change, we only rewrite the template cache.
-  ###
-  
-  ###
-  When the CSS files change, we need to compile and minify them.
-  ###
-  
-  ###
-  When a JavaScript unit test file changes, we only want to lint it and
-  run the unit tests. We don't want to do any live reloading.
-  ###
-  
-  ###
-  When a CoffeeScript unit test file changes, we only want to lint it and
-  run the unit tests. We don't want to do any live reloading.
-  ###
-  
-  ###
-  In order to make it safe to just compile or copy *only* what was changed,
-  we need to ensure we are starting from a clean, fresh build. So we rename
-  the `watch` task to `delta` (that's why the configuration var above is
-  `delta`) and then add a new task called `watch` that does a clean build
-  before watching for changes.
-  ###
-  
-  ###
-  The default task is to build and compile.
-  ###
-  
-  ###
-  The `build` task gets your app ready to run for development and testing.
-  ###
-  
-  ###
-  The `compile` task gets your app ready for deployment by concatenating and
-  minifying your code.
-  ###
-  
-  ###
   A utility function to get all app JavaScript sources.
   ###
   filterForJS = (files) ->
@@ -247,6 +29,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-karma"
   grunt.loadNpmTasks "grunt-ngmin"
   grunt.loadNpmTasks "grunt-html2js"
+  grunt.loadNpmTasks "grunt-express-server"
 
   require("coffee-script")
   userConfig = require("./build.config.coffee")
@@ -526,6 +309,20 @@ module.exports = (grunt) ->
       continuous:
         singleRun: true
 
+
+    express:
+      options:
+        cmd: 'coffee'
+        port: 8080
+        script: 'server.coffee'
+      build:
+        options:
+          args: ["--server"]
+      compile:
+        options:
+          args: ["--server", "--root=<%= compile_dir %>"]
+
+
     index:
       build:
         dir: "<%= build_dir %>"
@@ -618,6 +415,7 @@ module.exports = (grunt) ->
   grunt.registerTask "watch", [
     "build"
     "karma:unit"
+    "express:build"
     "delta"
   ]
   grunt.registerTask "default", [
@@ -646,6 +444,7 @@ module.exports = (grunt) ->
     "concat:compile_js"
     "uglify"
     "index:compile"
+    "express:compile"
   ]
   
 

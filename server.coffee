@@ -4,22 +4,25 @@ path = require("path")
 argv = require('optimist').argv
 
 app = express()
-app.configure ->
-  app.set "port", 8080
-  app.use express.favicon()
-  app.use express.logger("dev")
-  app.use express.bodyParser()
-  app.use express.methodOverride()
-  app.use app.router
 
-  dir = argv.root ? "build"
+app.set "port", 8080
+app.use express.favicon()
+app.use express.logger("dev")
+app.use express.bodyParser()
+app.use express.methodOverride()
+app.use app.router
 
-  app.use express.static(path.join(__dirname, dir))
-  app.get "/", express.static(path.join(__dirname, dir+"/index.html"))
+dir = argv.root ? "build"
 
-  app.configure "development", ->
-    app.use express.errorHandler()
+app.use express.static(path.join(__dirname, dir))
+app.get "/", express.static(path.join(__dirname, dir+"/index.html"))
 
-http.createServer(app).listen app.get("port"), ->
-  console.log "Express server listening on port " + app.get("port")
+app.use express.errorHandler()
+
+exports.app = app
+
+if argv.server
+  http.createServer(app).listen app.get("port"), ->
+    console.log "Express server listening on port " + app.get("port")
+
 
