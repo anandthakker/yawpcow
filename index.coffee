@@ -12,7 +12,7 @@ app.use express.bodyParser()
 app.use express.methodOverride()
 app.use app.router
 
-dir = argv.root ? "build"
+dir = argv.root ? "public"
 
 app.use express.static(path.join(__dirname, dir))
 app.get "/", express.static(path.join(__dirname, dir+"/index.html"))

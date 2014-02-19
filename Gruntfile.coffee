@@ -317,10 +317,10 @@ module.exports = (grunt) ->
         script: 'index.coffee'
       build:
         options:
-          args: ["--server"]
+          args: ["--server", "--root=<%= build_dir %>"]
       compile:
         options:
-          args: ["--server", "--root=<%= compile_dir %>"]
+          args: ["--server"]
           background: false
 
 
