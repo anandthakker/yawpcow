@@ -314,7 +314,7 @@ module.exports = (grunt) ->
       options:
         cmd: 'coffee'
         port: 8080
-        script: 'server.coffee'
+        script: 'index.coffee'
       build:
         options:
           args: ["--server"]
