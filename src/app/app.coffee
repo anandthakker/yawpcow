@@ -18,14 +18,11 @@ angular.module("yawpcow", [
 ]).config(myAppConfig = ($stateProvider, $urlRouterProvider, $logProvider) ->
   $urlRouterProvider.otherwise "/home"
   $logProvider.debugEnabled true
-  console.log "App Config"
 
 ).run(run = (loginService, $rootScope)->
 
   $rootScope.$on "firebaseInfo:connected", ()->
     loginService.init()
-
-  console.log "App run"
 
 ).value('firebaseUrl', 'https://yawpcow.firebaseio.com'
 

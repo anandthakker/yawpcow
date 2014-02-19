@@ -1,16 +1,25 @@
+
+
+
 .skill-list {
-  &>h1 {
-    margin-bottom: (@line-height-computed * -1);
-  }
-
-  .skill {
-
+  header {
     .make-row();
-
+    .clearfix();
+    h1 {
+      .make-sm-column(10);
+    }
+    .controls {
+      text-align: right;
+      margin-top: @line-height-computed;
+      .make-sm-column(2);
+    }
+  }
+  .skill {
+    .make-row();
+    margin-bottom: (@line-height-computed * 2);
     h1 {
       font-size: @font-size-h2;
       margin-bottom: (@line-height-computed / 4);
-      margin-top: (@line-height-computed * 2);
       .make-sm-column(12);
     }
     .prereqs {
@@ -21,7 +30,6 @@
     .sequels {
       display: none;
     }
-
     section>h2 {
       font-size: @font-size-h3;
       margin-top: (@line-height-computed / 2);
@@ -35,13 +43,25 @@
     .practice {
       .make-sm-column(6);
     }
-  }
-
-  .btn {
-  	padding: 0px;
+    &.tag-complete {
+      background-color: @gray-lighter;
+      opacity: .45;
+      .transition();
+    }
+    .done {
+      visibility: hidden;
+    }
+    border: 3px dashed @gray-lighter;
+    .transition();
+    &:hover {
+      border: 3px dashed @gray-light;
+      .transition();
+      .done {
+        visibility: visible;
+      }
+    }
   }
   .btn-link {
     color: black;
   }
-
 }

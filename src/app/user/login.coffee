@@ -7,6 +7,7 @@ angular.module("yawpcow.login", [
   "ui.router"
   "firebase"
   "firebase.connection"
+  "yawpcow.user.profile"
 ]).config( ($stateProvider)->
   $stateProvider.state "login",
     url: "/login"
@@ -27,12 +28,16 @@ angular.module("yawpcow.login", [
         template: ""
 
 ).factory("loginService",
-  ($rootScope, $firebaseSimpleLogin, $firebase, firebaseRef, profileCreator, $timeout, $q) ->
-
+  ($rootScope, $firebaseSimpleLogin, $firebase, firebaseRef, $timeout, $q, Profile)->
     $rootScope.$on "$firebaseSimpleLogin:error", (event, error)->
       throw new Error(error)
 
     $rootScope.$on "$firebaseSimpleLogin:login", (event, user)->
+
+      # Ugly -- TODO - move this to a service
+      profile = Profile.get(user.uid)
+      profile.$bind($rootScope, "userProfile")
+      
       role = $firebase(firebaseRef().child("roles").child(user.uid))
       role.$on "loaded", ()->
         $rootScope.$broadcast("loginService:role", role.$value)
@@ -87,28 +92,8 @@ angular.module("yawpcow.login", [
           callback and callback(null, user)
         ), callback
 
-      createProfile: profileCreator
-).filter("firstPartOfEmail", ()->
-  ucfirst = (str) ->
-    # credits: http://kevin.vanzonneveld.net
-    str += ""
-    f = str.charAt(0).toUpperCase()
-    f + str.substr(1)
-  firstPartOfEmail = (email) ->
-    if email?.indexOf("@") >= 0
-      ucfirst email.substr(0, email.indexOf("@"))
-    else
-      ""+email
+      createProfile: Profile.create
 
-).factory("profileCreator", ($firebase, firebaseRef, $timeout, $filter) ->
-  (id, email, callback) ->
-    firebaseRef().child("users").child(id).set
-      email: email
-      name: $filter("firstPartOfEmail")(email)
-    , (err) ->
-      if callback
-        $timeout ->
-          callback err
 ).controller "LoginCtrl", ($scope, loginService, $state) ->
   
   # must be logged in before I can write to my profile

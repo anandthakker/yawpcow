@@ -3,12 +3,6 @@
 */
 
 .skill {
-  @media (min-width: @screen-sm-min) {
-    h1, .prereqs {
-      vertical-align: baseline;
-      display: inline-block;
-    }
-  }
 
   h1 {
     color: #666;
@@ -36,6 +30,11 @@
 
   .sequels {
     margin-top: (@line-height-computed * 2);
+  }
+
+
+  .task-complete {
+    text-decoration: line-through;
   }
 
 }

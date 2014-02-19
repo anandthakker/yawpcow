@@ -1,6 +1,16 @@
 <article class="container skill-list">
-  <h1>Web Dev Skills and Concepts</h1>
+
+  <header>
+    <h1>Web Dev Skills and Concepts
+    </h1>
+    <div class="controls">
+      <button type="button" ng-show="userProfile.completedSkills.length > 0" class="btn btn-sm btn-default" ng-click="toggleShowCompleted()">
+        {{ showingCompleted ? "Hide Completed Topics" : "Show All Topics" }}
+      </button>
+    </div>
+  </header>
   <div ng-repeat="slug in slugs">
-    <skill slug="slug">
+    <skill slug="slug" completed-readings="userProfile.completedReadings" completed-practice="userProfile.completedPractice"
+    completed-skills="userProfile.completedSkills" ng-show="showingCompleted || !contains(userProfile.completedSkills, slug)">
   </div>
 </article>

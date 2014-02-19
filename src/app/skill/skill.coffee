@@ -23,6 +23,7 @@ angular.module("yawpcow.skill.main", [
   "ngSanitize"
   "textAngular"
   "taginput"
+  "checklist-model"
   "yawpcow.keyCommands"
 ]
 ).config(config = ($stateProvider) ->
@@ -47,7 +48,9 @@ angular.module("yawpcow.skill.main", [
       Edit
     </a>
     <div class="container">
-      <skill slug="slug">
+      <skill slug="slug" completed-readings="userProfile.completedReadings"
+      completed-practice="userProfile.completedPractice"
+      completed-skills="userProfile.completedSkills">
     </div>
     """
     data:
@@ -62,13 +65,30 @@ angular.module("yawpcow.skill.main", [
 
 
 
-).directive("skill", (Skills, Links)->
+).directive("skill", (Skills, Links, $log)->
   restrict: 'E'
   templateUrl: "skill/view/view.tpl.html"
   replace: true
   scope:
     slug: "="
+    completedReadings: "="
+    completedPractice: "="
+    completedSkills: "="
+
   link: (scope, element, attr)->
+
+    scope.contains = _.contains
+
+    scope.toggleComplete = ()->
+      if not scope.completedSkills?
+        $log.error("skill directive: Tried to set skill completed but no completedSkill list.")
+        return
+
+      if (i = scope.completedSkills.indexOf(scope.slug)) >= 0
+        scope.completedSkills.splice(i,1)
+      else
+        scope.completedSkills.push(scope.slug)
+
     scope.getLink = (id) ->
       Links.get(id)
 
@@ -79,7 +99,13 @@ angular.module("yawpcow.skill.main", [
 
     scope.getTagClasses = (slug)->
       tags = Skills.get(slug)?.tags ? []
-      tags.map (tag)->"tag-"+tag
+      classes = tags.map (tag)->"tag-"+tag
+
+      # YUCK
+      if(scope.completedSkills? and _.contains(scope.completedSkills, slug))
+        classes.push("tag-complete")
+
+      classes
 
 
 ).directive("addSkill", ($log, $timeout, Skills, $state) ->

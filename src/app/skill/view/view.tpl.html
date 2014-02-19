@@ -4,6 +4,9 @@
     <a ng-href="#/skill/{{slug}}/view">
       {{get(slug).title}}
     </a>
+    <button type="button" class="btn btn-sm btn-default done" ng-click="toggleComplete()" ng-show="completedSkills.length >= 0">
+      {{ contains(completedSkills, slug) ? "Keep working on this" : "I got this"}}
+    </button>
   </h1>
 
   <aside class="related prereqs"
@@ -25,24 +28,28 @@
     ng-show="get(slug).reading.length > 0">
     <h2>Reading</h2>
     <ul class="list-unstyled">
-      <li ng-repeat="l in get(slug).reading">
-        <a ng-href="{{getLink(l).url}}"
-          ng-show="getLink(l).url">
-          {{getLink(l).description}}
-        </a>
-        <span ng-show="!(getLink(l).url)">
-          {{getLink(l).description}}
-        </span>
+
+      <li ng-repeat="l in get(slug).reading" ng-class="{'task-complete': contains(completedReadings,l)}">
+
+        <input type="checkbox" checklist-model="completedReadings" checklist-value="l" ng-show="completedReadings.length >= 0">
+
+        <a ng-href="{{getLink(l).url}}" ng-show="getLink(l).url">{{getLink(l).description}}</a>
+        <span ng-show="!(getLink(l).url)">{{getLink(l).description}}</span>
+
       </li>
+
     </ul>
   </section>
 
-  <section class="practice"
-    ng-show="get(slug).practice.length > 0">
+  <section class="practice" ng-show="get(slug).practice.length > 0">
     <h2>Practice</h2>
     <ul class="list-unstyled">
-      <li ng-repeat="l in get(slug).practice">
-        <a ng-href="{{getLink(l).url}}">{{getLink(l).description}}</a>
+      <li ng-repeat="l in get(slug).practice" ng-class="{'task-complete': contains(completedPractice,l)}">
+        <input type="checkbox" checklist-model="completedPractice" checklist-value="l" ng-show="completedPractice.length >= 0">
+
+        <a ng-href="{{getLink(l).url}}" ng-show="getLink(l).url">{{getLink(l).description}}</a>
+        <span ng-show="!(getLink(l).url)">{{getLink(l).description}}</span>
+
       </li>
     </ul>
   </section>

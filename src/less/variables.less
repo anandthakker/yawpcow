@@ -41,6 +41,7 @@
 *
 */
 
+
 @titles-color: @gray-lighter;
 @subheading-color: @gray-light;
 
@@ -59,6 +60,14 @@
  * Mixins
  */
 
+.transition {
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;  
+}
+
 .list-inline {
   display: inline;
   list-style: none;
@@ -69,7 +78,6 @@
     padding-right: 3px;
   }
 }
-
 
 .clearfix {
   *zoom: 1;

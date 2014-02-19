@@ -94,7 +94,6 @@ angular.module('waitForAuth', [])
             $rootScope.$on("$firebaseSimpleLogin:logout", function() { fn('logout') });
             $rootScope.$on("$firebaseSimpleLogin:error",  function() { fn('error') });
             $rootScope.$on("loginService:role", function(event, role) {
-               console.log(role);
                loginRole = role;
                fn(loginState);
             });

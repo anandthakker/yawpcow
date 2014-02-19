@@ -19,4 +19,9 @@ SkillListController = ($scope, Skills, Links) ->
   $scope.selected = {}
   $scope.delete = (slugOrList) ->
     Skills.delete(slugOrList)
+
+  $scope.toggleShowCompleted = ()->
+    $scope.showingCompleted = !$scope.showingCompleted
+
+  $scope.contains = _.contains
 )

@@ -1,37 +1,33 @@
-
 <section id="skill-graph">
-<div class="admin" ng-show-auth="login" role="admin">
-  <button class="btn btn-link" 
-    ng-click="deletingNode = !deletingNode">
-    {{ deletingNode ? "Stop" : "Start"}} Deleting Nodes
-  </button>
-  <button class="btn btn-link" ng-click="deleteEdges()">Delete Selected Edges</button>
-  <!-- add edge/create edge/cancel  -->
-  <button class="btn btn-link" 
-    ng-click="addEdge()"
-    ng-show="!addingEdge">
+  <div class="admin" ng-show-auth="login" role="admin">
+    <button class="btn btn-link" ng-click="deletingNode = !deletingNode">
+      {{ deletingNode ? "Stop" : "Start"}} Deleting Nodes
+    </button>
+    <button class="btn btn-link" ng-click="deleteEdges()">Delete Selected Edges</button>
+    <!-- add edge/create edge/cancel  -->
+    <button class="btn btn-link" ng-click="addEdge()" ng-show="!addingEdge">
       Add Edges
-  </button>
-  <button class="btn btn-link"
-    ng-click="addEdge()"
-    ng-show="addingEdge.skill">
+    </button>
+    <button class="btn btn-link" ng-click="addEdge()" ng-show="addingEdge.skill">
       Create Edge
-  </button>
-  <button class="btn btn-link"
-    ng-click="cancelAdd()"
-    ng-show="addingEdge">
-    Stop Adding Edges
-  </button>
-  <span ng-show="addingEdge">{{addingEdge.prereq}} <i class="fa fa-long-arrow-right"/> {{addingEdge.skill}}</span>
+    </button>
+    <button class="btn btn-link" ng-click="cancelAdd()" ng-show="addingEdge">
+      Stop Adding Edges
+    </button>
+    <span ng-show="addingEdge">{{addingEdge.prereq}}<i class="fa fa-long-arrow-right" />{{addingEdge.skill}}</span>
 
-  <add-skill yc-key="['n','+']:New Skill"><i class="fa fa-plus"/> Add Skill</add-skill>
-</div>
+    <add-skill yc-key="['n','+']:New Skill"><i class="fa fa-plus" />Add Skill</add-skill>
+  </div>
+  <!-- /admin -->
 
-<skill-graph graph="graph" 
-  node-sep="5"
-  rank-sep="75"
-  redraw="redraw"
-  on-node-click="nodeClick"
-  tag-prefix="tag"/>
+
+  <div class="controls">
+    <button type="button" ng-show="userProfile.completedSkills.length > 0" class="btn btn-default" ng-click="toggleShowCompleted()">
+      {{ showingCompleted ? "Hide Completed Topics" : "Show All Topics" }}
+    </button>
+  </div>
+
+  <skill-graph graph="graph" node-sep="5" rank-sep="75" redraw="redraw" on-node-click="nodeClick" 
+  tag-prefix="tag">
 
 </section>

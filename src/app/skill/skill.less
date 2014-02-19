@@ -2,6 +2,11 @@
 /**
  * tag-specific styling
  */
+.tag-complete .tagged {
+  text-decoration: line-through;
+  opacity: .5;
+}
+
 .tag-CSS .tagged {
   color: @color-css;
 }
@@ -14,7 +19,11 @@
 .tag-javascript .tagged {
   color: @color-javascript;
 }
-a,strong {
+a,strong,h1,h2,h3,h4,h5,h6 {
+  &.tag-complete {
+    text-decoration: line-through;
+    opacity: .5;
+  }
   &.tag-CSS {
     color: @color-css;
   }

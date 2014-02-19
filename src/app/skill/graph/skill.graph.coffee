@@ -113,19 +113,15 @@ angular.module("yawpcow.skill.graph", [
     draw = () ->
       graph = scope.graph
 
+      console.log "draw"
+      console.log graph.sources()
+
       svg = d3.select(element[0]).select("svg")
       rend = renderer.layout(layout).run(graph, svg.select("g"))
       svg.attr("width", rend.graph().width + 40)
         .attr("height", rend.graph().height + 40)
-      # svg.call(d3.behavior.zoom().on "zoom", () ->
-      #   ev = d3.event
-      #   svg.select("g.graph-container")
-      #     .attr("transform", "translate(" + ev.translate + ") scale(" + ev.scale + ")")
-      # )
-
 
       if scope.tagPrefix?
-
         svg.selectAll(".node rect").each (d,i)->
           n = graph.node(d)
           return if not n.tags?
@@ -151,19 +147,32 @@ angular.module("yawpcow.skill.graph", [
           styleSelected(svg)
         )
 
-
-    unregister = scope.$watch "graph", (value)->
+    scope.$watch "graph", (value)->
       if not value? then return
-      angular.element($window).on 'resize', () -> scope.$apply () ->
-        draw()
       draw()
-      unregister()
 
     scope.redraw = () ->
       draw()
 
 
-).controller("SkillGraphCtrl", SkillGraphController = ($scope, $state, Skills, Slug) ->
+).controller("SkillGraphCtrl", SkillGraphController = ($scope, $state, Skills, Slug, $rootScope) ->
+
+
+  completeGraph = null
+
+  $scope.showingCompleted = false
+  updateFilteredGraph = ()->
+    if ($scope.showingCompleted)
+      $scope.graph = completeGraph
+    else
+      $scope.graph = completeGraph.filterNodes (node)->
+        not _.contains($scope.userProfile.completedSkills, node)
+
+  $scope.toggleShowCompleted = ()->
+    $scope.showingCompleted = not $scope.showingCompleted
+    $scope.showingCompleted ||= not ($scope.userProfile?.completedSkills?.length? > 0)
+
+    updateFilteredGraph()
 
 
   createEdge = (prereq, skill) ->
@@ -174,9 +183,8 @@ angular.module("yawpcow.skill.graph", [
     )
 
   buildGraph = () ->
-
     Skills.list().then (list)->
-      $scope.graph = new dagreD3.Digraph()
+      completeGraph = $scope.graph = new dagreD3.Digraph()
       for slug in list
         tags = Skills.get(slug).tags ? []
         
@@ -193,6 +201,11 @@ angular.module("yawpcow.skill.graph", [
         return if not Skills.get(slug)?.prereqs?
         for prereq in Skills.get(slug).prereqs
           createEdge(prereq, slug)
+
+      $rootScope.$watch "userProfile.completedSkills", (newval, oldval) ->
+        if(newval?)
+          updateFilteredGraph()
+      , true
 
 
   ###

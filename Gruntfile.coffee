@@ -202,7 +202,7 @@ module.exports = (grunt) ->
     coffeelint:
       options:
         'max_line_length': 
-          value: 100
+          value: 120
 
       src:
         files:
@@ -321,6 +321,7 @@ module.exports = (grunt) ->
       compile:
         options:
           args: ["--server", "--root=<%= compile_dir %>"]
+          background: false
 
 
     index:

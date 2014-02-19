@@ -22,7 +22,6 @@ angular.module("yawpcow.skill.resource", [
   graph = new dagreD3.Digraph()
 
   buildGraph = ()->
-    console.log dagreD3
     list = skillMap.$getIndex()
     for slug in list
       graph.addNode(slug)
