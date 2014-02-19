@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html ng-app="yawpcow" ng-controller="AppCtrl">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title ng-bind="pageTitle"></title>
+
+    <!-- social media tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@anandthakker">
+    <meta name="twitter:title" content="yawpcow">
+    <meta name="twitter:description" content="Yet another web programming course on the web.  (Course website for Park School of Baltimore Web Programming and Design course, Spring 2014)">
+    <meta name="twitter:creator" content="@anandthakker">
+    <meta property="og:title" content="yawpcow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://anandthakker.net/yawpcow" />
+    <meta property="og:description" content="Yet another web programming course on the web.  (Course website for Park School of Baltimore Web Programming and Design course, Spring 2014)">
+
+    <!-- font awesome from BootstrapCDN -->
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!-- google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic|Oswald:400,700,300' rel='stylesheet' type='text/css'>
+    
+    <!-- compiled CSS -->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.css" />
+    <link rel="stylesheet" type="text/css" href="assets/yawpcow-0.1.0.css" />
+
+    <!-- compiled JavaScript -->
+    <script type="text/javascript" src="assets/yawpcow-0.1.0.js"></script>
+
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" 
+            ng-init="navbarCollapsed=true" 
+            ng-click="navbarCollapsed = !navbarCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <i class="fa fa-bars"></i>
+          </button>
+          <a class="navbar-brand" href="#">YAWPCOW <small>v0.1.0</small></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" collapse="navbarCollapsed" id="main-navbar-content">
+          <ul class="nav navbar-nav navbar-left">
+            <li ui-route="/home" ng-class="{active:$uiRoute}">
+              <a href="#/home">
+                <i class="fa fa-home"></i>
+                Home
+              </a>
+            </li>
+            <li ui-route="/about" ng-class="{active:$uiRoute}">
+              <a href="#/about">
+                About
+              </a>
+            </li>
+            <li ui-route="/skill/graph" ng-class="{active:$uiRoute}">
+              <a href="#/skill/graph">
+                The Map
+              </a>
+            </li>
+            <li ui-route="/skill/list" ng-class="{active:$uiRoute}">
+              <a href="#/skill/list">
+                Reading &amp; Practice
+              </a>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li ng-show-auth="logout,error" ui-route="/login" ng-class="{active:$uiRoute}">
+              <a href="#/login">
+                Login
+              </a>
+            </li>
+            <li ng-show-auth="login">
+              <a href="#/logout">
+                Logout {{auth.user.email | firstPartOfEmail}}
+              </a>
+            </li>
+          </ul>
+
+        </div><!-- /.navbar-collapse -->
+      </nav>
+    </header>
+
+    <aside class="messages">
+      <alert ng-repeat="note in notifications" type="note.type" close="note.$remove()">
+        {{note.message}}
+        <button class="btn btn-xs btn-link"
+          ng-show="note.details"
+          ng-init="note.expand = false"
+          ng-click="note.expand = !note.expand">
+          {{note.expand ? "Hide" : "Show"}} Details
+        </button>
+        <div ng-show="note.expand">
+          {{note.details}}
+        </div>
+      </alert>
+    </aside>
+
+
+    <!-- main view -->
+    <div ui-view="main"></div>
+    <!-- /main view -->
+
+    <footer class="footer">
+          <div class="key-commands" 
+              ng-show="keyHelp"
+              yc-key="?:Show this help menu" 
+              yc-key-command="keyHelp = true;"
+              ng-show-auth="login" role="admin">
+            <dl>
+              <dt ng-repeat-start="(key, desc) in keyCommandGlossary">
+                {{key}}
+              </dt>
+              <dd ng-repeat-end>
+                {{desc}}
+              </dd>
+            </dl>
+            <a role="button" 
+            ng-click="keyHelp = false"
+            yc-key="esc">
+            <i class="fa fa-times"></i>
+            </a>
+          </div>
+          <ul class="social">
+          </ul>
+          
+          <p>
+            &copy; 2014 Anand Thakker. 
+            Built with <i class="fa fa-heart"></i> using 
+            <a href="http://www.angularjs.org">AngularJS</a>,
+            <a href="http://joshdmiller.github.io/ng-boilerplate/#/home">ng-boilerplate</a>,
+            <a href="http://getbootstrap.com">Bootstrap</a>, 
+            <a href="http://fontawesome.io">Font Awesome</a>,
+            <a href="http://d3js.org">d3</a>.
+          </p>
+    </footer>
+  </body>
+</html>
