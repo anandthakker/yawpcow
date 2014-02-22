@@ -33,10 +33,11 @@ angular.module("yawpcow.login", [
       throw new Error(error)
 
     $rootScope.$on "$firebaseSimpleLogin:login", (event, user)->
-
       # Ugly -- TODO - move this to a service
       profile = Profile.get(user.uid)
-      profile.$bind($rootScope, "userProfile")
+      profile.$bind($rootScope, "userProfile").then (unbind)->
+        $rootScope.$on "$firebaseSimpleLogin:logout", ()->
+          unbind()
       
       role = $firebase(firebaseRef().child("roles").child(user.uid))
       role.$on "loaded", ()->
