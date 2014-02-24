@@ -5,7 +5,7 @@ angular.module("yawpcow.skill.resource", [
   "firebase.connection"
 ]
 ).config(config = () ->
-).factory('Skills', ($log, firebaseRef, $firebase, Slug, $q, $rootScope) ->
+).factory('Skills', ($log, firebaseRef, $firebase, Slug, $q, $rootScope, $timeout) ->
 
   baseRef = firebaseRef().child("skills").child("v1")
 
@@ -50,7 +50,7 @@ angular.module("yawpcow.skill.resource", [
     buildGraph()
     updatePrereqs()
     updateTags()
-    listDeferred.resolve()
+    $timeout (()->listDeferred.resolve()), 1000
 
   i = 0
   skillMap.$on "change", () ->

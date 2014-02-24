@@ -1,70 +1,70 @@
 <article class="skill" ng-class="getTagClasses(slug)">
 
-  <h1 class="tagged">
-    <a ng-href="#/skill/{{slug}}/view">
-      {{get(slug).title}}
-    </a>
-    <button type="button" class="btn btn-sm btn-default done" ng-click="toggleComplete()"
-      ng-show="showCompletion">
-      {{ contains(completedSkills, slug) ? "Keep working on this" : "I got this"}}
-    </button>
-  </h1>
+  <div class="spinner" ng-hide="skill">
+    Loading...
+  </div>
 
-  <aside class="related prereqs"
-    ng-show="get(slug).prereqs.length > 0">
-    <h2>Prereqs:</h2>
-    <ul class="list-unstyled list-inline">
-      <li ng-repeat="prereq in get(slug).prereqs">
-        <a ng-href="#/skill/{{prereq}}/view"
-          ng-class="getTagClasses(prereq)">
+  <div class="content" ng-show="skill">
+    <h1 class="tagged">
+      <a ng-href="#/skill/{{slug}}/view">
+      {{skill.title}}
+    </a>
+      <button type="button" class="btn btn-sm btn-default done" ng-click="toggleComplete()" ng-show="showCompletion">
+        {{ contains(completedSkills, slug) ? "Keep working on this" : "I got this"}}
+      </button>
+    </h1>
+
+    <aside class="related prereqs" ng-show="skill.prereqs.length > 0">
+      <h2>Prereqs:</h2>
+      <ul class="list-unstyled list-inline">
+        <li ng-repeat="prereq in skill.prereqs">
+          <a ng-href="#/skill/{{prereq}}/view" ng-class="getTagClasses(prereq)">
           {{get(prereq).title}}
         </a>
-      </li>
-    </ul>
-  </aside>
+        </li>
+      </ul>
+    </aside>
 
-  <section  class="description" ng-bind-html="get(slug).content"/>
+    <section class="description" ng-bind-html="skill.content" />
 
-  <section class="reading"
-    ng-show="get(slug).reading.length > 0">
-    <h2>Reading</h2>
-    <ul class="list-unstyled">
+    <section class="reading" ng-show="skill.reading.length > 0">
+      <h2>Reading</h2>
+      <ul class="list-unstyled">
 
-      <li ng-repeat="l in get(slug).reading" ng-class="{'task-complete': contains(completedReadings,l)}">
+        <li ng-repeat="l in skill.reading" ng-class="{'task-complete': contains(completedReadings,l)}">
 
-        <input type="checkbox" checklist-model="completedReadings" checklist-value="l" ng-show="showCompletion">
+          <input type="checkbox" checklist-model="completedReadings" checklist-value="l" ng-show="showCompletion">
 
-        <a ng-href="{{getLink(l).url}}" ng-show="getLink(l).url">{{getLink(l).description}}</a>
-        <span ng-show="!(getLink(l).url)">{{getLink(l).description}}</span>
+          <a ng-href="{{getLink(l).url}}" ng-show="getLink(l).url">{{getLink(l).description}}</a>
+          <span ng-show="!(getLink(l).url)">{{getLink(l).description}}</span>
 
-      </li>
+        </li>
 
-    </ul>
-  </section>
+      </ul>
+    </section>
 
-  <section class="practice" ng-show="get(slug).practice.length > 0">
-    <h2>Practice</h2>
-    <ul class="list-unstyled">
-      <li ng-repeat="l in get(slug).practice" ng-class="{'task-complete': contains(completedPractice,l)}">
-        <input type="checkbox" checklist-model="completedPractice" checklist-value="l" ng-show="showCompletion">
+    <section class="practice" ng-show="skill.practice.length > 0">
+      <h2>Practice</h2>
+      <ul class="list-unstyled">
+        <li ng-repeat="l in skill.practice" ng-class="{'task-complete': contains(completedPractice,l)}">
+          <input type="checkbox" checklist-model="completedPractice" checklist-value="l" ng-show="showCompletion">
 
-        <a ng-href="{{getLink(l).url}}" ng-show="getLink(l).url">{{getLink(l).description}}</a>
-        <span ng-show="!(getLink(l).url)">{{getLink(l).description}}</span>
+          <a ng-href="{{getLink(l).url}}" ng-show="getLink(l).url">{{getLink(l).description}}</a>
+          <span ng-show="!(getLink(l).url)">{{getLink(l).description}}</span>
 
-      </li>
-    </ul>
-  </section>
+        </li>
+      </ul>
+    </section>
 
-  <aside class="related sequels">
-    <h2>Next steps:</h2>
-    <ul class="list-unstyled list-inline">
-      <li ng-repeat="sequel in getSequels(slug)">
-        <a ng-href="#/skill/{{sequel}}/view"
-          ng-class="getTagClasses(sequel)">
+    <aside class="related sequels">
+      <h2>Next steps:</h2>
+      <ul class="list-unstyled list-inline">
+        <li ng-repeat="sequel in sequels">
+          <a ng-href="#/skill/{{sequel}}/view" ng-class="getTagClasses(sequel)">
           {{get(sequel).title}}
         </a>
-      </li>
-    </ul>
-  </aside>
-
+        </li>
+      </ul>
+    </aside>
+  </div>
 </article>

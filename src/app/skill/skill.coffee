@@ -81,9 +81,22 @@ angular.module("yawpcow.skill.main", [
 
     scope.contains = _.contains
 
+    scope.getTagClasses = (slug)->
+      tags = Skills.get(slug)?.tags ? []
+      classes = tags.map (tag)->"tag-"+tag
+      # YUCK
+      if(scope.completedSkills? and _.contains(scope.completedSkills, slug))
+        classes.push("tag-complete")
+      classes
+
+    # Just using list() to get a promise, so that we know, once it
+    # resolves, that we can safely bind a skill object to the scope.
+    Skills.list().then ()->
+      scope.skill = Skills.get(scope.slug)
+      scope.sequels = Skills.getSequels(scope.slug)
+
     scope.toggleComplete = ()->
       scope.completedSkills ?= []
-
       if (i = scope.completedSkills.indexOf(scope.slug)) >= 0
         scope.completedSkills.splice(i,1)
       else
@@ -91,22 +104,6 @@ angular.module("yawpcow.skill.main", [
 
     scope.getLink = (id) ->
       Links.get(id)
-
-    scope.get = (slug) -> Skills.get(slug)
-
-    scope.getSequels = (slug) ->
-      Skills.getSequels(slug)
-
-    scope.getTagClasses = (slug)->
-      tags = Skills.get(slug)?.tags ? []
-      classes = tags.map (tag)->"tag-"+tag
-
-      # YUCK
-      if(scope.completedSkills? and _.contains(scope.completedSkills, slug))
-        classes.push("tag-complete")
-
-      classes
-
 
 ).directive("addSkill", ($log, $timeout, Skills, $state) ->
   restrict: 'E'

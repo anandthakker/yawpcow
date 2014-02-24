@@ -9,6 +9,11 @@
       </button>
     </div>
   </header>
+
+  <div class="spinner" ng-hide="slugs">
+    Loading...
+  </div>
+
   <div ng-repeat="slug in slugs">
     <skill slug="slug" 
     completed-readings="userProfile.completedReadings" 
