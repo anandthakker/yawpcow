@@ -16,7 +16,11 @@
     </button>
     <span ng-show="addingEdge">{{addingEdge.prereq}}<i class="fa fa-long-arrow-right" />{{addingEdge.skill}}</span>
 
-    <add-skill yc-key="['n','+']:New Skill"><i class="fa fa-plus" />Add Skill</add-skill>
+    <prompt-button yc-key="['n','+']:New Skill" 
+        model="newSkillTitle" done="finish(newSkillTitle)" 
+        placeholder="Title">
+      <i class="fa fa-plus"/>Add Skill
+    </prompt-button>
   </div>
   <!-- /admin -->
 

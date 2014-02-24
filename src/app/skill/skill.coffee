@@ -24,6 +24,7 @@ angular.module("yawpcow.skill.main", [
   "textAngular"
   "taginput"
   "checklist-model"
+  "prompt-button"
   "yawpcow.keyCommands"
 ]
 ).config(config = ($stateProvider) ->
@@ -106,41 +107,6 @@ angular.module("yawpcow.skill.main", [
       Links.get(id)
 
     scope.get = (slug) -> Skills.get(slug)
-
-).directive("addSkill", ($log, $timeout, Skills, $state) ->
-  restrict: 'E'
-  templateUrl: 'skill/addskill.tpl.html'
-  replace: true
-  transclude: true
-  link: (scope, element, attr) ->
-
-    startAdd = ()->
-      scope.adding = true
-      scope.add = finishAdd
-      element.find('input').bind 'blur', () -> scope.$apply () ->
-        cancelAdd()
-      $timeout ()->
-        element.find('input')[0].focus()
-    cancelAdd = ()->
-      scope.adding = false
-      scope.add = startAdd
-    finishAdd = ()->
-      scope.adding = false
-      scope.add = startAdd
-      Skills.create(scope.title).then (slug) ->
-        $state.go('skill.edit', {skillTitle: slug})
-
-    element.bind 'click', () -> scope.$apply () -> if not scope.adding then scope.add()
-
-    element.find('input').bind 'keyup', (e) -> scope.$apply () ->
-      if(e.which == 13)
-        scope.add()
-      else if(e.which == 27)
-        cancelAdd()
-    scope.add = startAdd
-    scope.adding = false
-
-
 
 ).controller("SkillCtrl",
 SkillController = ($log, $scope, $state, $stateParams, Skills, Links) ->

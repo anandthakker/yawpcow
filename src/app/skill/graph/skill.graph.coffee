@@ -299,6 +299,10 @@ angular.module("yawpcow.skill.graph", [
     $scope.addingEdge = null
     clearSelection()
 
+  $scope.newSkill = (title)->
+    Skills.create(title).then (slug) ->
+      $state.go('skill.edit', {skillTitle: slug})
+
 )
 
 
