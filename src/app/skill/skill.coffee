@@ -105,6 +105,8 @@ angular.module("yawpcow.skill.main", [
     scope.getLink = (id) ->
       Links.get(id)
 
+    scope.get = (slug) -> Skills.get(slug)
+
 ).directive("addSkill", ($log, $timeout, Skills, $state) ->
   restrict: 'E'
   templateUrl: 'skill/addskill.tpl.html'
