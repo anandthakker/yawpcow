@@ -50,7 +50,8 @@ angular.module("yawpcow.skill.main", [
     <div class="container">
       <skill slug="slug" completed-readings="userProfile.completedReadings"
       completed-practice="userProfile.completedPractice"
-      completed-skills="userProfile.completedSkills">
+      completed-skills="userProfile.completedSkills"
+      show-completion="userProfile">
     </div>
     """
     data:
@@ -74,15 +75,14 @@ angular.module("yawpcow.skill.main", [
     completedReadings: "="
     completedPractice: "="
     completedSkills: "="
+    showCompletion: "="
 
   link: (scope, element, attr)->
 
     scope.contains = _.contains
 
     scope.toggleComplete = ()->
-      if not scope.completedSkills?
-        $log.error("skill directive: Tried to set skill completed but no completedSkill list.")
-        return
+      scope.completedSkills ?= []
 
       if (i = scope.completedSkills.indexOf(scope.slug)) >= 0
         scope.completedSkills.splice(i,1)

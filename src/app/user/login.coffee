@@ -33,16 +33,15 @@ angular.module("yawpcow.login", [
       throw new Error(error)
 
     $rootScope.$on "$firebaseSimpleLogin:login", (event, user)->
-      # Ugly -- TODO - move this to a service
-      profile = Profile.get(user.uid)
-      profile.$bind($rootScope, "userProfile").then (unbind)->
-        $rootScope.$on "$firebaseSimpleLogin:logout", ()->
-          unbind()
-      
       role = $firebase(firebaseRef().child("roles").child(user.uid))
       role.$on "loaded", ()->
         $rootScope.$broadcast("loginService:role", role.$value)
 
+      Profile.get(user.uid).then (profile) ->
+        profile.$bind($rootScope, "userProfile").then (unbind)->
+          $rootScope.$on "$firebaseSimpleLogin:logout", ()->
+            unbind()
+            delete $rootScope.userProfile
 
     assertAuth = ->
       throw new Error("Must call loginService.init() before using its methods")  if auth is null
@@ -53,18 +52,13 @@ angular.module("yawpcow.login", [
       init: ->
         $rootScope.auth = auth = $firebaseSimpleLogin(firebaseRef())
 
-      login: (email, pass, callback) ->
+      login: (email, pass) ->
         assertAuth()
         auth.$login("password",
           email: email
           password: pass
           rememberMe: true
-        ).then ((user) ->
-          if callback
-            $timeout ->
-              callback null, user
-
-        ), callback
+        )
 
       logout: ->
         assertAuth()
@@ -89,21 +83,19 @@ angular.module("yawpcow.login", [
 
       createAccount: (email, pass, callback) ->
         assertAuth()
-        auth.$createUser(email, pass).then ((user) ->
-          callback and callback(null, user)
-        ), callback
+        auth.$createUser(email, pass)
 
-      createProfile: Profile.create
 
-).controller "LoginCtrl", ($scope, loginService, $state) ->
+).controller "LoginCtrl", ($scope, loginService, Profile, $state) ->
   
   # must be logged in before I can write to my profile
-  assertValidLoginAttempt = ->
+  assertValidLoginAttempt = (create)->
+    $scope.err = null
     unless $scope.email
       $scope.err = "Please enter an email address"
     else unless $scope.pass
       $scope.err = "Please enter a password"
-    else $scope.err = "Passwords do not match"  if $scope.pass isnt $scope.confirm
+    else $scope.err = "Passwords do not match"  if create and ($scope.pass isnt $scope.confirm)
     not $scope.err
 
   $scope.email = null
@@ -111,24 +103,23 @@ angular.module("yawpcow.login", [
   $scope.confirm = null
   $scope.createMode = false
 
-  $scope.login = (cb) ->
-    $scope.err = null
-    unless $scope.email
-      $scope.err = "Please enter an email address"
-    else unless $scope.pass
-      $scope.err = "Please enter a password"
-    else
-      loginService.login $scope.email, $scope.pass, (err, user) ->
-        $scope.err = (if err then err + "" else null)
-        cb and cb(user)  unless err
-        $state.go if err then "login" else "home"
-  
+  $scope.login = () ->
+    return false unless assertValidLoginAttempt(false)
+    loginService.login($scope.email, $scope.pass).then ()->
+      $state.go 'home'
+    , (err)-> throw new Error(err)
+
   $scope.createAccount = ->
     $scope.err = null
-    if assertValidLoginAttempt()
-      loginService.createAccount $scope.email, $scope.pass, (err, user) ->
-        if err
-          $scope.err = (if err then err + "" else null)
-        else
-          $scope.login ->
-            loginService.createProfile user.uid, user.email
+    return false unless assertValidLoginAttempt(true)
+    loginService.createAccount($scope.email, $scope.pass
+    ).then((user)->
+      loginService.login($scope.email, $scope.pass)
+    ).then((user)->
+      Profile.create user.uid, user.email
+    ).then(()->
+      $state.go 'home'
+    , (err)-> throw new Error(err))
+
+
+

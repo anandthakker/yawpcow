@@ -113,9 +113,6 @@ angular.module("yawpcow.skill.graph", [
     draw = () ->
       graph = scope.graph
 
-      console.log "draw"
-      console.log graph.sources()
-
       svg = d3.select(element[0]).select("svg")
       rend = renderer.layout(layout).run(graph, svg.select("g"))
       svg.attr("width", rend.graph().width + 40)
@@ -166,7 +163,7 @@ angular.module("yawpcow.skill.graph", [
       $scope.graph = completeGraph
     else
       $scope.graph = completeGraph.filterNodes (node)->
-        not _.contains($scope.userProfile.completedSkills, node)
+        not _.contains($scope.userProfile?.completedSkills ? [], node)
 
   $scope.toggleShowCompleted = ()->
     $scope.showingCompleted = not $scope.showingCompleted

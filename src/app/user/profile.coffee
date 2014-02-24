@@ -13,25 +13,31 @@ angular.module("yawpcow.user.profile", [
     else
       ""+email
 
-).factory("Profile", ($firebase, firebaseRef, $timeout, $filter)->
+).factory("Profile", ($firebase, firebaseRef, $timeout, $filter, $q)->
 
   Profile =
+    create: (uid, email) ->
+      deferred = $q.defer()
+      firebaseRef().child("users").child(uid)
+        .child("email").set email, (err) ->
+          if err
+            deferred.reject(err)
+          else
+            deferred.resolve(Profile.get(uid))
+
+      deferred.promise
+
     get: (uid)->
-      profile = $firebase(firebaseRef().child("users").child(uid))
+      deferred = $q.defer()
+      ref = firebaseRef().child("users").child(uid)
+      ref.on 'value', wait = (snap)->
+        return unless snap.val()?
+        ref.off 'value', wait #unlisten now that we've got data.
+        profile = $firebase(firebaseRef().child("users").child(uid))
+        deferred.resolve(profile)
 
-      profile.completedReadings ?= []
-      profile.completedPractice ?= []
-      profile.completedSkills ?= []
-
-      profile
-
-    create: (id, email, callback) ->
-      firebaseRef().child("users").child(id).set
-        email: email
-        name: $filter("firstPartOfEmail")(email)
-      , (err) ->
-        if callback
-          $timeout ->
-            callback err
-
+      deferred.promise
 )
+
+
+

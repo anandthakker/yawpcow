@@ -10,7 +10,11 @@
     </div>
   </header>
   <div ng-repeat="slug in slugs">
-    <skill slug="slug" completed-readings="userProfile.completedReadings" completed-practice="userProfile.completedPractice"
-    completed-skills="userProfile.completedSkills" ng-show="showingCompleted || !contains(userProfile.completedSkills, slug)">
+    <skill slug="slug" 
+    completed-readings="userProfile.completedReadings" 
+    completed-practice="userProfile.completedPractice"
+    completed-skills="userProfile.completedSkills" 
+    show-completion="userProfile"
+    ng-show="showingCompleted || !contains(userProfile.completedSkills, slug)">
   </div>
 </article>
