@@ -40,6 +40,7 @@ angular.module("yawpcow.skill.graph", [
       selected or deselected.
     on-edge-click: function to be called (with edge id as parameter) when an edge is
       selected or deselected.
+    hover-select: set node selection when node is hovered by mouse
   ###
 
   restrict: "E"
@@ -82,6 +83,7 @@ angular.module("yawpcow.skill.graph", [
 
     styleSelected = (svg) ->
       gr = scope.graph
+
       svg.selectAll(".node").classed("selected", (d)->
         gr.node(d).selected
       )
@@ -127,6 +129,18 @@ angular.module("yawpcow.skill.graph", [
 
 
       styleSelected(svg)
+
+      if(attr.hoverSelect?)
+        svg.selectAll(".node")
+          .on("mouseover", (d)->
+            graph.node(d).selected = true
+            styleSelected(svg)
+          )
+          .on("mouseout", (d)->
+            graph.node(d).selected = false
+            styleSelected(svg)
+          )
+
       svg.selectAll(".edgePath path").on("click", (d,i)->scope.$apply ()->
         edge = graph.edge(d)
         edge.selected = not edge.selected
@@ -237,12 +251,10 @@ angular.module("yawpcow.skill.graph", [
     else if $scope.deletingNode
       Skills.delete(slug)
       buildGraph()
-    else if $scope.graph.node(slug).selected
-      # we want only one node selected at a time, so if
-      # this one was just selected, clear other selections.
+      $scope.redraw()
+    else
       $scope.graph.eachNode (s, value)->
         if value.selected and (s isnt slug) then value.selected = false
-    else
       $state.go("skill.view", {skillTitle: slug})
 
 
