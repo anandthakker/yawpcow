@@ -103,6 +103,14 @@ module.exports = (grunt) ->
           expand: true
         ]
 
+      build_vendor_css:
+        files: [
+          src: ['<%= vendor_files.css %>']
+          dest: '<%= build_dir %>'
+          cwd: '.'
+          expand: true
+        ]
+
       compile_assets:
         files: [
           src: ["**"]
@@ -112,7 +120,7 @@ module.exports = (grunt) ->
         ]
 
     concat:
-      build_css:
+      compile_css:
         src: [
           "<%= vendor_files.css %>"
           "<%= recess.build.dest %>"
@@ -340,7 +348,6 @@ module.exports = (grunt) ->
         dir: "<%= compile_dir %>"
         src: [
           "<%= concat.compile_js.dest %>"
-          "<%= vendor_files.css %>"
           "<%= recess.compile.dest %>"
         ]
 
@@ -388,7 +395,7 @@ module.exports = (grunt) ->
 
       less:
         files: ["src/**/*.less"]
-        tasks: ["recess:build", "concat:build_css"]
+        tasks: ["recess:build"]
 
       jsunit:
         files: ["<%= app_files.jsunit %>"]
@@ -430,15 +437,16 @@ module.exports = (grunt) ->
     "coffeelint"
     "coffee"
     "recess:build"
-    "concat:build_css"
     "copy:build_app_assets"
     "copy:build_vendor_assets"
     "copy:build_appjs"
     "copy:build_vendorjs"
+    "copy:build_vendor_css"
     "index:build"
     "karma:continuous"
   ]
   grunt.registerTask "compile", [
+    "concat:compile_css"
     "recess:compile"
     "copy:compile_assets"
     "ngmin"

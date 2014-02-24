@@ -70,6 +70,7 @@ module.exports =
 
 #      "vendor/angular/angular.min.js"
       "vendor/angular/angular.js"
+      "vendor/angular-sanitize/angular-sanitize.min.js"
 
       "vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js"
 
@@ -82,7 +83,6 @@ module.exports =
       "vendor/angularfire/angularfire.min.js"
 
       "vendor/angular-slugify/angular-slugify.js"
-      "vendor/angular-sanitize/angular-sanitize.min.js"
 
       "vendor/textAngular/textAngular.min.js"
       "vendor/select2/select2.min.js"
@@ -90,7 +90,6 @@ module.exports =
       "vendor/checklist-model/checklist-model.js"
 
       "vendor/d3/d3.min.js"
-      "vendor/graphlib.min/index.js"
       "vendor/dagre-d3/build/dagre-d3.min.js"
     ]
     map: [
