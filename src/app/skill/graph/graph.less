@@ -39,7 +39,6 @@
     fill: none;
     stroke: #000;
     stroke-width: 3px;
-    opacity: .25;
     stroke-opacity: .15;
     &:hover {
       stroke-opacity: 1;
@@ -62,6 +61,18 @@
     stroke: @color-making;
   }
 
+  .tag-complete {
+    fill-opacity: .05;
+    stroke-opacity: .2;
+    path {
+      stroke-opacity: .05;
+    }
+  }
+  .tag-complete + g {
+    div {
+      color: @subheading-color;
+    }
+  }
 
   .selected * {
     stroke-opacity: 1;

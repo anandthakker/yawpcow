@@ -123,8 +123,12 @@ angular.module("yawpcow.skill.graph", [
       if scope.tagPrefix?
         svg.selectAll(".node rect").each (d,i)->
           n = graph.node(d)
-          return if not n.tags?
-          for tag in n.tags
+          for tag in (n.tags ? [])
+            d3.select(this).classed(scope.tagPrefix + "-" + tag, true)
+
+        svg.selectAll(".edgePath").each (d)->
+          e = graph.edge(d)
+          for tag in (e.tags ? [])
             d3.select(this).classed(scope.tagPrefix + "-" + tag, true)
 
 
@@ -173,11 +177,28 @@ angular.module("yawpcow.skill.graph", [
 
   $scope.showingCompleted = false
   updateFilteredGraph = ()->
+    completedSkills = $scope.userProfile?.completedSkills ? []
+
+    completeGraph?.eachNode (slug, node)->
+      complete = _.contains(completedSkills, slug)
+      tagged = _.contains(node.tags, "complete")
+      if complete and not tagged
+        node.tags.push "complete"
+        for e in completeGraph.outEdges(slug)
+          completeGraph.edge(e).tags.push "complete"
+
+      if tagged and not complete
+        node.tags.splice(node.tags.indexOf "complete", 1)
+        for e in completeGraph.outEdges(slug)
+          edgeTags = completeGraph.edge(e).tags
+          edgeTags.splice(edgeTags.indexOf "complete", 1)
+
+
     if ($scope.showingCompleted)
       $scope.graph = completeGraph
     else
-      $scope.graph = completeGraph.filterNodes (node)->
-        not _.contains($scope.userProfile?.completedSkills ? [], node)
+      $scope.graph = completeGraph?.filterNodes (node)->
+        not _.contains(completedSkills, node)
 
   $scope.toggleShowCompleted = ()->
     $scope.showingCompleted = not $scope.showingCompleted
@@ -191,22 +212,24 @@ angular.module("yawpcow.skill.graph", [
           skill: skill
           prereq: prereq
           selected: false
+          tags: []
     )
 
   buildGraph = () ->
     Skills.list().then (list)->
+
       completeGraph = $scope.graph = new dagreD3.Digraph()
+
       for slug in list
         tags = Skills.get(slug).tags ? []
         
         unless tags.indexOf("hidden") >= 0
-          $scope.graph.addNode(slug,
-            label: """
-            <div>#{Skills.get(slug).title}</div>
-            """
+          skill =
+            label: "<div>#{Skills.get(slug).title}</div>"
             selected: false
-            tags: Skills.get(slug).tags
-          )
+            tags: (Skills.get(slug).tags ? []).concat()
+
+          $scope.graph.addNode(slug,skill)
 
       $scope.graph.eachNode (slug)->
         return if not Skills.get(slug)?.prereqs?
